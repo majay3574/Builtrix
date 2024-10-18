@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 import { channel } from 'diagnostics_channel';
 
 
-let jiraIssueKeys: string[] = [];
+
 const timestamp = Date.now();
 const reportDir = `./reporter/playwright-reports-${timestamp}`;
 
