@@ -1,6 +1,6 @@
 import test from "playwright/test";
-import { generateAccessToken } from "../api_test/generateAccessTokken";
-import { createLead } from "../api_test/lead";
+import { generateAccessToken } from "../api_services/generateAccessTokken";
+import { createLead } from "../api_services/lead";
 
 let instanceURL: any, accessTokken: any
 test.beforeAll(`Generate Access Tokken`, async () => {
