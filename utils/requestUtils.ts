@@ -1,104 +1,58 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 
-export async function postRequest(
-    userData: Record<string, any>,
+export async function httpRequest(
+    method: 'get' | 'post' | 'put' | 'delete' | 'patch',
     endPoint: string,
+    userData?: Record<string, any>,
     customHeaders?: Record<string, string>,
-    additionalConfig?: AxiosRequestConfig,
+    additionalConfig?: AxiosRequestConfig
 ): Promise<any> {
+    let requestBody: any;
+    let isFormData = false;
 
-    const formData = new FormData();
-    Object.entries(userData).forEach(([key, value]) => {
-        formData.append(key, value);
-    });
-
-    try {
-
-        const headers = {
-            "Content-Type": "multipart/form-data",
-            "Connection": "keep-alive",
-            ...customHeaders
-        };
-
-        const response: AxiosResponse<any> = await axios.post(endPoint, formData, {
-            headers,
-            ...additionalConfig
-        });
-        return {
-            data: response.data,
-            status: response.status
+    // Check if userData is provided and determine if it's FormData
+    if (userData) {
+        isFormData = Object.values(userData).some(value => value instanceof Blob || typeof value === 'string');
+        
+        if (isFormData) {
+            // If userData contains Blobs or strings, use FormData
+            requestBody = new FormData();
+            Object.entries(userData).forEach(([key, value]) => {
+                requestBody.append(key, value);
+            });
+        } else {
+            // Otherwise, treat userData as JSON
+            requestBody = JSON.stringify(userData);
         }
-
-    } catch (error) {
-        console.error("Error making POST request:", error);
-        throw error;
     }
-}
-
-
-export async function getRequest(
-    userData: Record<string, any>,
-    endPoint: string,
-    customHeaders?: Record<string, string>,
-    additionalConfig?: AxiosRequestConfig
-): Promise<any> {
-    try {
-        const queryParams = new URLSearchParams(userData).toString();
-
-        const headers = {
-            "Content-Type": "application/json",
-            "Connection": "keep-alive",
-            ...customHeaders
-        };
-
-        const url = queryParams ? `${endPoint}?${queryParams}` : endPoint;
-        const response: AxiosResponse<any> = await axios.get(url, {
-            headers,
-            ...additionalConfig
-        });
-
-        console.log(response.data);
-        return response.data;
-    } catch (error) {
-        console.error("Error making GET request:", error);
-        throw error;
-    }
-}
-
-
-
-export async function deleteRequest(
-    userData: Record<string, any>,
-    endPoint: string,
-    customHeaders?: Record<string, string>,
-    additionalConfig?: AxiosRequestConfig
-): Promise<any> {
-
-    const formData = new FormData();
-    Object.entries(userData).forEach(([key, value]) => {
-        formData.append(key, value);
-    });
 
     try {
         const headers = {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": isFormData ? "multipart/form-data" : "application/json",
             "Connection": "keep-alive",
-            ...customHeaders
+            ...customHeaders,
         };
 
         const config: AxiosRequestConfig = {
             headers,
-            data: formData,
             ...additionalConfig
         };
 
-        const response: AxiosResponse<any> = await axios.delete(endPoint, config);
+        // Use axios method based on the specified HTTP method
+        const response: AxiosResponse<any> = await axios({
+            method,
+            url: endPoint,
+            data: method !== 'get' ? requestBody : undefined, // Set request body only for non-GET requests
+            ...config
+        });
 
-        console.log(response.data);
-        return response.data;
+        return {
+            data: response.data,
+            status: response.status
+        };
 
     } catch (error) {
-        console.error("Error making DELETE request:", error);
+        console.error(`Error making ${method.toUpperCase()} request:`, error);
         throw error;
     }
 }
