@@ -13,4 +13,3 @@ test(`CreateLead`, async () => {
     console.log(response);
 })
 
-test

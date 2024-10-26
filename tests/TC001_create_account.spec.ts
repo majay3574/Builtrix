@@ -1,6 +1,6 @@
 import { test } from "../customFixtures/salesForceFixture"
-import { FakerData } from "../utils/fakerUtils"
-import { readDataFromCSV } from '../utils/csvUtil';
+import { FakerData } from "../helpers/fakerUtils"
+import { readDataFromCSV } from '../helpers/csvUtil';
 const csvFilePath = './data/accounts.csv';
 
 test('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceHome, SalesforceAccount }) => {

@@ -1,5 +1,5 @@
 import { test } from "../customFixtures/salesForceFixture"
-import { FakerData } from "../utils/fakerUtils"
+import { FakerData } from "../helpers/fakerUtils"
 
 let firstName = FakerData.getFirstName()
 test.use({ storageState: "logins/salesforce.json" })

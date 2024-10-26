@@ -1,5 +1,5 @@
 import { BrowserContext, Page } from "playwright";
-import { PlaywrightWrapper } from "../utils/playwright";
+import { PlaywrightWrapper } from "../helpers/playwright";
 import { credentials } from "../constants/credentialData";
 import { expect } from "playwright/test";
 import { URLConstants } from "../constants/urlConstants";
@@ -58,7 +58,7 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
             lastNameInput: `input[name='lastName']`,
             accountNameField: `label:text-is('Account Name') + * input`,
             newAccountTag: `span[title='New Account']`,
-            newAccountHeader:`h1:text-is('New Account')`,
+            newAccountHeader: `h1:text-is('New Account')`,
         }
     }
     public async salesforceLogin(role: string) {
