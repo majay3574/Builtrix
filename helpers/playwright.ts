@@ -18,8 +18,6 @@ export abstract class PlaywrightWrapper {
     readonly page: Page;
     readonly context: BrowserContext
 
-
-    index: number
     constructor(page: Page, context: BrowserContext,) {
         this.page = page;
         this.context = context;

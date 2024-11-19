@@ -2,21 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 interface Data {
-  managerName?: string;
-  adminName?: string;
-  courseAdmin?: string;
-  talentAdmin?:string;
-  peopleAdmin?: string
-  commerceAdmin?: string;
-  learnerAdmin?:string;
-  customAdmin?: string;
-  instructorName?: string;
-  commonUser?: string;
   enrollAdmin?: string;
-  internalUser?:string;
-  externalUser?:string;
-  teamUser1?:string;
-  teamUser2?:string;
+ 
 
 }
 
@@ -79,11 +66,7 @@ export { getRandomItemFromFile };
 
 interface tcData {
   tc071a?: string
-  tc071b?: string
-  tc073?: string
-  tc056?: string
-  tc057?: string
-  tc058?: string
+
 }
 const cronFile = '../data/cronjob.json';
 

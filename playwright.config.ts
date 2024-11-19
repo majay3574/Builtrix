@@ -71,23 +71,7 @@ export default defineConfig({
         }
 
       }
-    },
-    ...(
-      true ? [{
-        name: 'Verification',
-        testDir: './zCronVerification',
-        use: {
-
-          headless: false,
-          channel: 'chrome',
-          viewport: null,
-          launchOptions: {
-            slowMo: 300,
-            args: ["--start-maximized", "--disable-web-security"]
-          }
-        }
-      },] : []
-    ), ...(
+    }, ...(
       false ? [{
         name: 'API Testing',
         testDir: './api/apiTestIntegration',
