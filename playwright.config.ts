@@ -21,7 +21,7 @@ export default defineConfig({
   workers: 1,
   repeatEach: 0,
 
-  reporter: [['html', { outputFolder: reportDir, open: 'always' }]],
+  reporter: [['html', { outputFolder: reportDir, open: 'always' }], ['line'], ["allure-playwright"]],
   //reporter: [['html', { open: 'always' }]],
   use: {
     actionTimeout: 20000,
