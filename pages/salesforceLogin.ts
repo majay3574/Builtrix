@@ -62,6 +62,7 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
         }
     }
     public async salesforceLogin(role: string) {
+        
         const { username, password } = credentials[role];
         await this.loadApp(URLConstants.adminURL)
         await this.type(this.selectors.username, "Username", username);
@@ -69,7 +70,7 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
         await this.click(this.selectors.loginBtn, "Sign In", "Button");
         await this.validateElementVisibility(this.selectors.applauncherIcon, "App Launcher");
         await this.verifyHomeLabel();
-        // await this.storeState("./logins/salesforce.json")
+        await this.storeState("./logins/salesforce.json")
     }
 
 

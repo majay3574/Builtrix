@@ -1,11 +1,20 @@
 import { defineConfig, devices } from '@playwright/test';
 import { channel } from 'diagnostics_channel';
-
+import { OrtoniReportConfig } from 'ortoni-report';
 
 
 const timestamp = Date.now();
 const reportDir = `./reporter/playwright-reports-${timestamp}`;
-
+const reportConfig: OrtoniReportConfig = {
+  base64Image: true,
+  title: "Playwright Framework with Typescript",
+  showProject: true,
+  filename: "OrtoniHtmlReport",
+  authorName: "Ajay Michael",
+  preferredTheme: "dark",
+  folderPath: "html-report",
+  projectName: "Playwright Framework with Typescript",
+}
 export default defineConfig({
   timeout: 550000,
 
@@ -20,8 +29,9 @@ export default defineConfig({
   retries: 0,
   workers: 1,
   repeatEach: 0,
-
-  reporter: [['html', { outputFolder: reportDir, open: 'always' }], ['line'], ["allure-playwright"]],
+  //globalSetup: './global.setup.ts',
+  reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./CustomReporterConfig.ts`], ['line'], ["allure-playwright"]
+    , ['ortoni-report', reportConfig]],
   //reporter: [['html', { open: 'always' }]],
   use: {
     actionTimeout: 20000,

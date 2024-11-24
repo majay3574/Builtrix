@@ -35,7 +35,10 @@ export const test = baseTest.extend<expertusFixture>({
 
 
 })
-
+/* test.beforeAll(async ({ SalesforceLogin }) => {
+    await SalesforceLogin.salesforceLogin("ADMINLOGIN")
+});
+ */
 /* test.afterEach(async ({}, testInfo) => {
     jiraIssueKey = await logADefectInJira(testInfo);
 });

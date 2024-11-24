@@ -10,7 +10,7 @@
   "author": "Qeagle",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.43.1",
+    "@playwright/test": "^1.49.0",
     "@types/node": "^20.10.6",
     "@types/pg": "^8.11.6",
     "@types/video.js": "^7.3.58",
@@ -29,12 +29,14 @@
     "jsdom": "^24.1.0",
     "mailslurp-client": "^15.20.2",
     "mysql2": "^3.10.2",
+    "ortoni-report": "^2.0.3",
     "pg": "^8.12.0",
     "playwright": "^1.43.1",
     "typescript": "^5.5.4",
     "video.js": "^8.18.1",
     "videojs-ads": "^0.1.0",
     "videojs-contrib-ads": "^7.5.2",
+    "winston": "^3.17.0",
     "xlsx": "^0.18.5"
   }
 }

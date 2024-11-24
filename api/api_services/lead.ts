@@ -1,6 +1,6 @@
 import url from "../../data/apiData/url.json";
 import { createLeaddata, oauthData } from '../../data/apiData/rawData';
-import { httpRequest } from "../../utils/requestUtils";
+import { httpRequest } from "../../helpers/requestUtils";
 
 const baseURL = url.leadEndPoint;
 

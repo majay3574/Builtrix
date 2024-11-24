@@ -1,46 +1,88 @@
 import fs from 'fs';
 import path from 'path';
 
-interface Data {
-  enrollAdmin?: string;
- 
+/**
+ * Updates a JSON file by merging new data with the existing content of the file.
+ * If the file does not exist, is empty, or contains malformed JSON, it creates a default structure and updates.
+ * 
+ * @param filePath - The relative path to the JSON file to be updated.
+ * @param newData - The new data to merge with the existing JSON data.
+ * @returns void
+ */
+export function updateJSONFile<T>(filePath: string, newData: T): void {
+  const fullPath = path.join(__dirname, filePath);
 
-}
+  if (!fs.existsSync(fullPath)) {
+    console.error(`File ${filePath} does not exist. Creating a new file.`);
 
-const fileName = '../data/adminGroupsData.json';
-
-export function updateFieldsInJSON(newData: Data): void {
-  const filepath = path.join(__dirname, fileName);
-
-  let existingData: Data = {
-    enrollAdmin: ''
-  };
-
-
-  try {
-    const data = fs.readFileSync(filepath, 'utf8');
-    existingData = JSON.parse(data);
-  } catch (err) {
-    console.error('Error reading file:', err);
-
-    return;
+    const initialData: T = {} as T;
+    const jsonData: string = JSON.stringify(initialData, null, 2);
+    fs.writeFileSync(fullPath, jsonData, 'utf8');
+    console.log(`${filePath} has been created with an initial structure.`);
   }
 
-  const updatedData: Data = {
+  let existingData: T = {} as T;
+
+  try {
+    const data = fs.readFileSync(fullPath, 'utf8');
+    if (!data.trim()) {
+      console.log(`The file ${filePath} is empty. Initializing with default structure.`);
+
+      existingData = {} as T;
+      const jsonData: string = JSON.stringify(existingData, null, 2);
+      fs.writeFileSync(fullPath, jsonData, 'utf8');
+      console.log(`${filePath} has been initialized with a default structure.`);
+    } else {
+
+      existingData = JSON.parse(data);
+    }
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      console.error(`Malformed JSON in ${filePath}:`, err.message);
+    } else {
+      console.error(`Error reading file ${filePath}:`, err);
+    }
+    return;
+  }
+  const updatedData: T = {
     ...existingData,
     ...newData
   };
+
   const jsonData: string = JSON.stringify(updatedData, null, 2);
 
-  fs.writeFile(filepath, jsonData, 'utf8', (err) => {
-    if (err) {
-      console.error('Error writing JSON file:', err);
-    } else {
-      console.log('JSON file has been updated.');
-    }
-  });
-
+  fs.writeFileSync(fullPath, jsonData, 'utf8');
+  console.log(`${filePath} has been successfully updated.`);
 }
+
+/* use:
+interface CronData {
+  tc071a?: string;
+}
+// Update the cronjob.json file
+updateJSONFile<CronData>('../data/cronjob.json', { tc071a: 'new value' });
+/*
+
+/**
+ * Reads a JSON file from the provided file path and returns a random item from the array in the file.
+ * 
+ * @param filePath - The relative path to the JSON file (from the current directory).
+ * @returns A random string from the JSON array in the file, or null if the file is empty or an error occurs.
+ * 
+ * The function reads the content of a JSON file, which should be an array of strings. 
+ * It picks a random index from the array and returns the corresponding string.
+ * If the file cannot be read or the JSON is invalid, it catches the error and returns `null`.
+ * If the array in the file is empty, it will also return `null`.
+ */
+function getRandomItemFromFile(filePath: string): string {
+  const dataFilePath = path.join(__dirname, filePath);
+  const data: string[] = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
+
+  const randomIndex = Math.floor(Math.random() * data.length);
+  return data[randomIndex];
+}
+export { getRandomItemFromFile };
+
 export function saveDataToJsonFile(filename: string, data: any): void {
   const jsonContent = JSON.stringify({ title: data }, null, 2);
   const filePath = path.join(__dirname, filename);
@@ -51,54 +93,4 @@ export function saveDataToJsonFile(filename: string, data: any): void {
       console.log(`JSON file has been saved to ${filePath}`);
     }
   });
-}
-
-
-function getRandomItemFromFile(filePath: string): string {
-  const dataFilePath = path.join(__dirname, filePath);
-  const data: string[] = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
-
-  const randomIndex = Math.floor(Math.random() * data.length);
-  return data[randomIndex];
-}
-
-export { getRandomItemFromFile };
-
-interface tcData {
-  tc071a?: string
-
-}
-const cronFile = '../data/cronjob.json';
-
-export function updateCronDataJSON(newData: tcData): void {
-  const filepath = path.join(__dirname, cronFile);
-
-  let existingData: tcData = {
-    tc071a: ''
-  };
-
-
-  try {
-    const data = fs.readFileSync(filepath, 'utf8');
-    existingData = JSON.parse(data);
-  } catch (err) {
-    console.error('Error reading file:', err);
-
-    return;
-  }
-
-  const updatedData: tcData = {
-    ...existingData,
-    ...newData
-  };
-  const jsonData: string = JSON.stringify(updatedData, null, 2);
-
-  fs.writeFile(filepath, jsonData, 'utf8', (err) => {
-    if (err) {
-      console.error('Error writing JSON file:', err);
-    } else {
-      console.log('JSON file has been updated.');
-    }
-  });
-
 }
