@@ -11,4 +11,5 @@ node_modules/
 /html-report
 /allure-results
 /logs
+.env
 data/apiData/oauthData.env
