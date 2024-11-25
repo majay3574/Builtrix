@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import { FakerData } from '../../helpers/fakerUtils';
-dotenv.config({ path: '../../data/apiData/oauthData.env' });
+// dotenv.config({ path: '../../data/apiData/oauthData.env' });
+require('dotenv').config({ path: './data/apiData/oauthData.env' });
+
 
 export const oauthData = {
     grant_type: 'password',

@@ -7,7 +7,7 @@ const timestamp = Date.now();
 const reportDir = `./reporter/playwright-reports-${timestamp}`;
 const reportConfig: OrtoniReportConfig = {
   base64Image: true,
-  title: "Playwright Framework with Typescript",
+  title: "Sonic Framework with Typescript",
   showProject: true,
   filename: "OrtoniHtmlReport",
   authorName: "Ajay Michael",
@@ -42,6 +42,7 @@ export default defineConfig({
     video: 'on',
     ignoreHTTPSErrors: true,
     bypassCSP: true,
+   // storageState: "./logins/salesforceLogin.json"
 
   },
 
@@ -82,9 +83,9 @@ export default defineConfig({
 
       }
     }, ...(
-      false ? [{
+      true ? [{
         name: 'API Testing',
-        testDir: './api/apiTestIntegration',
+        testDir: './api',
 
         use: {
           headless: false,

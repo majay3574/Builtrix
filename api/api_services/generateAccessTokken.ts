@@ -7,9 +7,9 @@ import { httpRequest } from "../../helpers/requestUtils";
 const baseURL = url.bearerTokken;
 
 
+
 export async function generateAccessToken() {
     try {
-
         const response = await httpRequest('post', baseURL, oauthData, {
             'Content-Type': 'application/x-www-form-urlencoded'
         });

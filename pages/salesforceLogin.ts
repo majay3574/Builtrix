@@ -62,15 +62,21 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
         }
     }
     public async salesforceLogin(role: string) {
-        
+        await this.wait('maxWait');
         const { username, password } = credentials[role];
-        await this.loadApp(URLConstants.adminURL)
-        await this.type(this.selectors.username, "Username", username);
-        await this.type(this.selectors.password, "password", password);
-        await this.click(this.selectors.loginBtn, "Sign In", "Button");
-        await this.validateElementVisibility(this.selectors.applauncherIcon, "App Launcher");
-        await this.verifyHomeLabel();
-        await this.storeState("./logins/salesforce.json")
+       /*  const pageTitle = await this.page.title();
+        if (pageTitle.startsWith("Login")) { */
+            await this.loadApp(URLConstants.adminURL)
+            await this.type(this.selectors.username, "Username", username);
+            await this.type(this.selectors.password, "password", password);
+            await this.click(this.selectors.loginBtn, "Sign In", "Button");
+            await this.validateElementVisibility(this.selectors.applauncherIcon, "App Launcher");
+            await this.verifyHomeLabel();
+            await this.page.context().storageState({ path: "./logins/salesforceLogin.json" })
+       /*  } else {
+            console.log("Login page is Skipped");
+
+        } */
     }
 
 
