@@ -1,3 +1,3 @@
 export enum URLConstants {
-    adminURL = "https://login.salesforce.com/?locale=in"
+    adminURL = "https://qeagle8-dev-ed.develop.my.salesforce.com/"
 }

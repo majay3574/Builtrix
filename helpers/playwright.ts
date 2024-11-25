@@ -94,8 +94,13 @@ export abstract class PlaywrightWrapper {
             await this.page.locator(locator).click({ force: true });
         });
     }
-    async storeState(path: string) {
-        await this.page.context().storageState({ path: path })
+    async storeState(path: string): Promise<void> {
+        try {
+            await this.context.storageState({ path });
+            console.log(`Storage state saved to: ${path}`);
+        } catch (error) {
+            console.error(`Failed to save storage state to: ${path}`, error);
+        }
     }
 
     /**

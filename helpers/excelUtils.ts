@@ -35,7 +35,7 @@ export class ExcelReader {
             const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
             if (data.length === 0) {
-                return []; 
+                return [];
             }
 
             const headers = (data[0] as string[]).map(header => header.trim().toLowerCase()); // Normalize headers
@@ -54,18 +54,18 @@ export class ExcelReader {
         }
     }
 
-   
-    public getRowByTestcase(sheetIndexOrName: number | string, testcase: string ): any | null {
+
+    public getRowByTestcase(sheetIndexOrName: number | string, property: string, testcase: string,): any | null {
         const data = this.readExcel(sheetIndexOrName);
         if (data) {
-            return data.find(row => row.testcase === testcase) || null;
+            return data.find(row => row[property] === testcase) || null;
         }
         return null;
     }
 }
 /* const reader = new ExcelReader('../data/expertousOneData.xlsx');
 const testCaseID = "TC004";
-const rowData = reader.getRowByTestcase('admin', testCaseID); 
+const rowData = reader.getRowByTestcase('admin',RowName ,testCaseID); 
 
 if (rowData) {
     const login = rowData?.login; 

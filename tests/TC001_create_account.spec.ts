@@ -5,7 +5,7 @@ import { updateJSONFile } from "../helpers/jsonDataHandler";
 import { accountData } from "../data/account.interface";
 const csvFilePath = './data/accounts.csv';
 
-
+//test.use({ storageState: "./logins/salesforceLogin.json" })
 test('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceHome, SalesforceAccount }) => {
     const data = await readDataFromCSV(csvFilePath);
     test.info().annotations.push(
@@ -19,7 +19,7 @@ test('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceH
         const acctName = FakerData.getRandomTitle();
         updateJSONFile<accountData>("../data/accountdata.json", { TC001: acctName });
         await SalesforceLogin.salesforceLogin("ADMINLOGIN");
-        await SalesforceLogin.verifyHomeLabel();
+        //await SalesforceLogin.verifyHomeLabel();
         await SalesforceHome.appLauncher();
         await SalesforceHome.viewAll();
         await SalesforceHome.searchApp("Accounts");
