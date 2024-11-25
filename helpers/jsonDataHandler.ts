@@ -56,11 +56,11 @@ export function updateJSONFile<T>(filePath: string, newData: T): void {
 }
 
 /* use:
-interface CronData {
+export interface newData {
   tc071a?: string;
 }
-// Update the cronjob.json file
-updateJSONFile<CronData>('../data/cronjob.json', { tc071a: 'new value' });
+// Update the newData.json file
+updateJSONFile<newData>('../data/newData.json', { tc071a: 'new value' });
 /*
 
 /**
@@ -74,14 +74,14 @@ updateJSONFile<CronData>('../data/cronjob.json', { tc071a: 'new value' });
  * If the file cannot be read or the JSON is invalid, it catches the error and returns `null`.
  * If the array in the file is empty, it will also return `null`.
  */
-function getRandomItemFromFile(filePath: string): string {
+export function getRandomItemFromFile(filePath: string): string {
   const dataFilePath = path.join(__dirname, filePath);
   const data: string[] = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
 
   const randomIndex = Math.floor(Math.random() * data.length);
   return data[randomIndex];
 }
-export { getRandomItemFromFile };
+
 
 export function saveDataToJsonFile(filename: string, data: any): void {
   const jsonContent = JSON.stringify({ title: data }, null, 2);
