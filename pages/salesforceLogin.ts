@@ -6,8 +6,8 @@ import { URLConstants } from "../constants/urlConstants";
 
 export class SalesforceLoginPage extends PlaywrightWrapper {
 
-    constructor(page: Page, context: BrowserContext) {
-        super(page, context);
+    constructor( page: Page, context: BrowserContext) {
+        super( page, context);
     }
 
     public selectors = {

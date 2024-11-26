@@ -3,12 +3,14 @@ import { SalesforceHomePage } from '../pages/salesforceHomePage'
 import { SalesforceLeadPage } from '../pages/salesforceLeadPage'
 import { SalesforceAccountPage } from '../pages/salesforceAccountPage'
 import { SalesforceLoginPage } from '../pages/salesforceLogin'
+import { SalesforceMobilePublisherPage } from '../pages/salesforceMobilePublisher'
 
 type expertusFixture = {
     SalesforceHome: SalesforceHomePage
     SalesforceLead: SalesforceLeadPage
     SalesforceAccount: SalesforceAccountPage
     SalesforceLogin: SalesforceLoginPage
+    SalesforceMobilePublisher: SalesforceMobilePublisherPage
 }
 
 export const test = baseTest.extend<expertusFixture>({
@@ -31,7 +33,11 @@ export const test = baseTest.extend<expertusFixture>({
     SalesforceAccount: async ({ page, context }, use) => {
         const SalesforceAccount = new SalesforceAccountPage(page, context);
         await use(SalesforceAccount)
-    }
+    },
+    SalesforceMobilePublisher: async ({ page, context }, use) => {
+        const SalesforceMobilePublisher = new SalesforceMobilePublisherPage(page, context);
+        await use(SalesforceMobilePublisher);
+    },
 
 
 })

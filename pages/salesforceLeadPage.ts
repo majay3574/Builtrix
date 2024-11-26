@@ -4,9 +4,9 @@ import { SalesforceHomePage } from "./salesforceHomePage";
 
 export class SalesforceLeadPage extends SalesforceHomePage {
 
-    constructor(page: Page, context: BrowserContext) {
+   /*  constructor(page: Page, context: BrowserContext) {
         super(page, context);
-    }
+    } */
     public async newButton() {
         await this.validateElementVisibility(this.selectors.newBtn, "New Button")
         await this.click(this.selectors.newBtn, "New", "Button")

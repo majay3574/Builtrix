@@ -4,19 +4,15 @@ import * as path from 'path';
 import fs from 'fs'
 import axios from "axios";
 
-declare module '@playwright/test' {
-    interface Page {
-        delayedFill: (selector: string, value: string) => Promise<void>;
-        clickAndDelay: (selector: string) => Promise<void>;
-    }
 
-}
 
 
 export abstract class PlaywrightWrapper {
 
     readonly page: Page;
-    readonly context: BrowserContext
+    readonly context: BrowserContext;
+    private static newPage: Page | null = null;
+
 
     constructor(page: Page, context: BrowserContext,) {
         this.page = page;
@@ -190,13 +186,6 @@ export abstract class PlaywrightWrapper {
     async multipleWindowsCount(): Promise<number> {
         const windowslength = this.page.context().pages().length;
         return windowslength;
-    }
-
-    async fillwithDelay(locator: string, inputValues: string) {
-        await this.page.delayedFill(locator, inputValues)
-    }
-    async clickwithDelay(locator: string) {
-        await this.page.clickAndDelay(locator);
     }
 
     /**
@@ -510,6 +499,29 @@ export abstract class PlaywrightWrapper {
 
     }
 
+    protected getNewPage(): Page {
+        if (!PlaywrightWrapper.newPage) {
+            throw new Error('New tab is not initialized. Did you forget to call childTab()?');
+        }
+        return PlaywrightWrapper.newPage;
+    }
+
+    async childTab(locator: string): Promise<Page> {
+
+        [PlaywrightWrapper.newPage] = await Promise.all([
+            this.context.waitForEvent('page'),
+            this.page.locator(locator).click()
+        ]);
+        return PlaywrightWrapper.newPage
+    }
+    async clickwithnewInstance(selector: string) {
+        await this.getNewPage().locator(selector).click()
+        return this.getNewPage().title()
+    }
+
+    async fillwithNewInstance(selector: string, data: string) {
+        await this.getNewPage().fill(selector, data)
+    }
     // async radioButton(locator: string, name: string) {
     //     await test.step(`Checkbox ${name} is selected`, async () => {
 

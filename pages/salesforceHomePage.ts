@@ -1,6 +1,8 @@
-import {  SalesforceLoginPage } from "./salesforceLogin";
+import { BrowserContext, Page } from "playwright";
+import { SalesforceLoginPage } from "./salesforceLogin";
 
 export class SalesforceHomePage extends SalesforceLoginPage {
+
 
     public async appLauncher() {
         await this.validateElementVisibility(this.selectors.applauncherIcon, "App Launcher");
@@ -19,4 +21,10 @@ export class SalesforceHomePage extends SalesforceLoginPage {
     public async app(data: string) {
         await this.click(this.selectors.appOrItem(data), data, "Button")
     }
+
+    public async clickMobilePublisher() {
+        await this.childTab("//span[text()='Learn More']");
+    }
+
+
 }

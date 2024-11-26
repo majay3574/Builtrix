@@ -42,7 +42,7 @@ export default defineConfig({
     video: 'on',
     ignoreHTTPSErrors: true,
     bypassCSP: true,
-    storageState: "logins/salesforceLogin.json"
+   // storageState: "logins/salesforceLogin.json"
 
   },
 
