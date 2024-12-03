@@ -5,16 +5,6 @@ import { OrtoniReportConfig } from 'ortoni-report';
 
 const timestamp = Date.now();
 const reportDir = `./reporter/playwright-reports-${timestamp}`;
-const reportConfig: OrtoniReportConfig = {
-  base64Image: true,
-  title: "Sonic Framework with Typescript",
-  showProject: true,
-  filename: "OrtoniHtmlReport",
-  authorName: "Ajay Michael",
-  preferredTheme: "dark",
-  folderPath: "html-report",
-  projectName: "Playwright Framework with Typescript",
-}
 export default defineConfig({
   timeout: 550000,
 
@@ -29,10 +19,9 @@ export default defineConfig({
   retries: 0,
   workers: 1,
   repeatEach: 0,
-  //globalSetup: './global.setup.ts',
-  reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./CustomReporterConfig.ts`], ['line'], ["allure-playwright"]
-    , ['ortoni-report', reportConfig]],
-  //reporter: [['html', { open: 'always' }]],
+  
+  reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./CustomReporterConfig.ts`], ['line'], ["allure-playwright"]],
+ 
   use: {
     actionTimeout: 20000,
     trace: 'on',

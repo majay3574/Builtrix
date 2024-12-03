@@ -13,7 +13,12 @@ export abstract class PlaywrightWrapper {
     readonly context: BrowserContext;
     private static newPage: Page | null = null;
 
-
+    protected getNewPage(): Page {
+        if (!PlaywrightWrapper.newPage) {
+            throw new Error('New tab is not initialized. Did you forget to call childTab()?');
+        }
+        return PlaywrightWrapper.newPage;
+    }
     constructor(page: Page, context: BrowserContext,) {
         this.page = page;
         this.context = context;
@@ -87,9 +92,17 @@ export abstract class PlaywrightWrapper {
     async click(locator: string, name: string, type: string) {
         await test.step(`The ${name} ${type} clicked`, async () => {
             await this.page.waitForSelector(locator, { state: 'visible' });
+            await this.page.locator(locator).click();
+        });
+    }
+
+    async forceClick(locator: string, name: string, type: string) {
+        await test.step(`The ${name} ${type} clicked`, async () => {
+            await this.page.waitForSelector(locator, { state: 'visible' });
             await this.page.locator(locator).click({ force: true });
         });
     }
+    
     async storeState(path: string): Promise<void> {
         try {
             await this.context.storageState({ path });
@@ -252,9 +265,11 @@ export abstract class PlaywrightWrapper {
         this.page.on("dialog", async (dialog) => {
             dialog.message()
             await dialog.accept(Data);
+            this.page.locator("ghfegrf").contentFrame();
             console.log('Dialog Message:', dialog.message());
         });
     }
+
     //i:number;
     async clickinFrame(frameLocator: string, locator: string, name: string, type: string, index: number) {
         await test.step(`The ${type} ${name} clicked`, async () => {
@@ -499,12 +514,7 @@ export abstract class PlaywrightWrapper {
 
     }
 
-    protected getNewPage(): Page {
-        if (!PlaywrightWrapper.newPage) {
-            throw new Error('New tab is not initialized. Did you forget to call childTab()?');
-        }
-        return PlaywrightWrapper.newPage;
-    }
+
 
     async childTab(locator: string): Promise<Page> {
 

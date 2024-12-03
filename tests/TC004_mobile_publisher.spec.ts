@@ -11,5 +11,5 @@ test(` Mobile Publisher testCase`, async ({ page, SalesforceHome, SalesforceMobi
     await SalesforceHome.verifyHomeLabel();
     await SalesforceHome.clickMobilePublisher();
     await SalesforceMobilePublisher.clickConfirmButton();
-    //await SalesforceMobilePublisher.clickProduct();
+    await SalesforceMobilePublisher.clickProduct();
 })
