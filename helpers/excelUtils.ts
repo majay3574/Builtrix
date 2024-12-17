@@ -63,7 +63,7 @@ export class ExcelReader {
         return null;
     }
 }
-/* const reader = new ExcelReader('../data/expertousOneData.xlsx');
+/* const reader = new ExcelReader('../data/OneData.xlsx');
 const testCaseID = "TC004";
 const rowData = reader.getRowByTestcase('admin',RowName ,testCaseID); 
 

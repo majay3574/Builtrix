@@ -4,6 +4,7 @@ import { readDataFromCSV } from '../helpers/csvUtil';
 import { updateJSONFile } from "../helpers/jsonDataHandler";
 import { accountData } from "../data/account.interface";
 import { SalesforceHomePage } from "../pages/salesforceHomePage";
+import { PlaywrightWrapper } from "../helpers/playwright";
 const csvFilePath = './data/accounts.csv';
 
 //test.use({ storageState: "./logins/salesforceLogin.json" })
@@ -18,7 +19,6 @@ test('Creating an Account Using CSV Data', async ({ page, context, SalesforceLog
     for (const row of data) {
         const { Rating, Type, Industry, Ownership, BillingStreet, BillingCity, PostalCode, BillingState, BillingCountry } = row;
         const acctName = FakerData.getRandomTitle();
-
         updateJSONFile<accountData>("../data/accountdata.json", { TC001: acctName });
         await SalesforceLogin.salesforceLogin("ADMINLOGIN");
         //await SalesforceLogin.verifyHomeLabel();

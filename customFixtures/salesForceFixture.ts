@@ -5,7 +5,7 @@ import { SalesforceAccountPage } from '../pages/salesforceAccountPage'
 import { SalesforceLoginPage } from '../pages/salesforceLogin'
 import { SalesforceMobilePublisherPage } from '../pages/salesforceMobilePublisher'
 
-type expertusFixture = {
+type salesForceFixture = {
     SalesforceHome: SalesforceHomePage
     SalesforceLead: SalesforceLeadPage
     SalesforceAccount: SalesforceAccountPage
@@ -13,7 +13,7 @@ type expertusFixture = {
     SalesforceMobilePublisher: SalesforceMobilePublisherPage
 }
 
-export const test = baseTest.extend<expertusFixture>({
+export const test = baseTest.extend<salesForceFixture>({
 
     SalesforceLogin: async ({ page, context }, use) => {
         const salesforceLogin = new SalesforceLoginPage(page, context);

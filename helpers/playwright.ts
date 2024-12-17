@@ -1,9 +1,7 @@
 
-import { Page, test, expect, BrowserContext, Locator } from "@playwright/test";
+import { Page, test, expect, BrowserContext } from "@playwright/test";
 import * as path from 'path';
-import fs from 'fs'
-import axios from "axios";
-
+import fs from 'fs';
 
 
 
@@ -33,12 +31,42 @@ export abstract class PlaywrightWrapper {
    */
     async type(locator: string, name: string, data: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
+
+
             await this.page.locator(locator).clear();
             await this.page.locator(locator).fill(data);
-        });
+
+        }
+        )
     }
 
-
+    async webElementClick(attribute: "label" | "placeholder" | "text" | "title" | "altText" | "id" | "class", locator: string) {
+        switch (attribute) {
+            case "label":
+                await this.page.getByLabel(locator).click();
+                break;
+            case "placeholder":
+                await this.page.getByPlaceholder(locator).click();
+                break;
+            case "text":
+                await this.page.getByText(locator).click();
+                break;
+            case "title":
+                await this.page.getByTitle(locator).click();
+                break;
+            case "altText":
+                await this.page.getByAltText(locator).click();
+                break;
+           /*  case "id":
+                await (await this.getById(locator)).click();
+                break;
+            case "class":
+                await (await this.getByClass(locator)).click();
+                break; */
+            default:
+                throw new Error(`Unsupported attribute: ${attribute}`);
+        }
+    }
 
     /**
      * Types into the specified textbox, clears existing text, and presses <ENTER>.
@@ -102,7 +130,7 @@ export abstract class PlaywrightWrapper {
             await this.page.locator(locator).click({ force: true });
         });
     }
-    
+
     async storeState(path: string): Promise<void> {
         try {
             await this.context.storageState({ path });
@@ -532,19 +560,34 @@ export abstract class PlaywrightWrapper {
     async fillwithNewInstance(selector: string, data: string) {
         await this.getNewPage().fill(selector, data)
     }
-    // async radioButton(locator: string, name: string) {
-    //     await test.step(`Checkbox ${name} is selected`, async () => {
-
-    //       if(!await this.page.isChecked(locator)){
-    //         await this.page.focus(locator)
-    //         await this.page.check(locator, { force: true });
-    //       }else{
-    //         console.log("The button is already checked")
-    //       }
-    //     })
-    // }
 
 
+    async radioButton(locator: string, name: string) {
+        await test.step(`Checkbox ${name} is selected`, async () => {
+
+            if (!await this.page.isChecked(locator)) {
+                await this.page.focus(locator)
+                await this.page.check(locator, { force: true });
+            } else {
+                console.log("The button is already checked")
+            }
+        })
+    }
+
+    /*  async waitForNewPage(action: () => Promise<void>): Promise<Page> {
+         const pagePromise = this.page.context().waitForEvent('page');
+         await action();
+         const oPage = await pagePromise;
+         await oPage.waitForLoadState();
+         return oPage;
+     }
+ 
+     async switchToNewPage(action: () => Promise<void>): Promise<PlaywrightWrapper> {
+         const newPage = await this.waitForNewPage(action);
+         return new PlaywrightWrapper(oPage);
+     }
+ 
+  */
 
 
 
