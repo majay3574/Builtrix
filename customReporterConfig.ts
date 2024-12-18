@@ -11,10 +11,10 @@ const logger = winston.createLogger({
     level: 'info',
     format: customFormat,
     transports: [
-        new winston.transports.Console({ level: 'debug' }), // Logs to console
-        new winston.transports.File({ filename: 'logs/info.log', level: 'info' }), // Info-level logs
-        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }), // Error-level logs
-        new winston.transports.File({ filename: 'logs/debug.log', level: 'debug' }), // Debug logs
+        new winston.transports.Console({ level: 'debug' }),
+        new winston.transports.File({ filename: 'logs/info.log', level: 'info' }), 
+        new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'logs/debug.log', level: 'debug' }), 
     ],
 });
 

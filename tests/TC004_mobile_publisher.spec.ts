@@ -1,6 +1,6 @@
 import { test } from "../customFixtures/salesForceFixture"
 
-test(` Mobile Publisher testCase`, async ({ page, SalesforceHome, SalesforceMobilePublisher }) => {
+test(` Mobile Publisher testCase`, async ({ SalesforceHome, SalesforceMobilePublisher }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
         { type: 'TestCase', description: 'Creating Lead' },
@@ -12,4 +12,6 @@ test(` Mobile Publisher testCase`, async ({ page, SalesforceHome, SalesforceMobi
     await SalesforceHome.clickMobilePublisher();
     await SalesforceMobilePublisher.clickConfirmButton();
     await SalesforceMobilePublisher.clickProduct();
+    await SalesforceMobilePublisher.clickAgentforce();
+    await SalesforceMobilePublisher.hoverPricing();
 })

@@ -6,14 +6,14 @@ import { URLConstants } from "../constants/urlConstants";
 
 export class SalesforceLoginPage extends PlaywrightWrapper {
 
-    constructor( page: Page, context: BrowserContext) {
-        super( page, context);
+    constructor(page: Page, context: BrowserContext) {
+        super(page, context);
     }
 
     public selectors = {
         username: "#username",
         password: "#password",
-        loginBtn: "#Login",
+        loginBtn: "Login",
         applauncherIcon: ".slds-icon-waffle",
         homeLabel: "//h1//span[text()='Home']",
         viewAllBtn: `//button[text()="View All"]`,
@@ -70,7 +70,7 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
         if (pageTitle.startsWith("Login")) {
             await this.type(this.selectors.username, "Username", username);
             await this.type(this.selectors.password, "password", password);
-            await this.click(this.selectors.loginBtn, "Sign In", "Button");
+            await this.webElementClick('ID', this.selectors.loginBtn);
             await this.wait('mediumWait')
             await this.storeState("./logins/salesforceLogin.json")
             await this.validateElementVisibility(this.selectors.applauncherIcon, "App Launcher");

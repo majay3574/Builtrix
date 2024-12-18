@@ -1,5 +1,6 @@
 
-import { Page, test, expect, BrowserContext } from "@playwright/test";
+import { Page, test, expect, BrowserContext, Locator } from "@playwright/test";
+//import { ILocator } from './Ilocator';
 import * as path from 'path';
 import fs from 'fs';
 
@@ -22,6 +23,7 @@ export abstract class PlaywrightWrapper {
         this.context = context;
     }
 
+
     /**
    * Types into the specified textbox after clearing any existing text.
    * 
@@ -40,33 +42,6 @@ export abstract class PlaywrightWrapper {
         )
     }
 
-    async webElementClick(attribute: "label" | "placeholder" | "text" | "title" | "altText" | "id" | "class", locator: string) {
-        switch (attribute) {
-            case "label":
-                await this.page.getByLabel(locator).click();
-                break;
-            case "placeholder":
-                await this.page.getByPlaceholder(locator).click();
-                break;
-            case "text":
-                await this.page.getByText(locator).click();
-                break;
-            case "title":
-                await this.page.getByTitle(locator).click();
-                break;
-            case "altText":
-                await this.page.getByAltText(locator).click();
-                break;
-            /*  case "id":
-                 await (await this.getById(locator)).click();
-                 break;
-             case "class":
-                 await (await this.getByClass(locator)).click();
-                 break; */
-            default:
-                throw new Error(`Unsupported attribute: ${attribute}`);
-        }
-    }
 
     /**
      * Types into the specified textbox, clears existing text, and presses <ENTER>.
@@ -266,47 +241,21 @@ export abstract class PlaywrightWrapper {
         return null;
     }
 
-    async switchToWindowWithTitle(windowTitle: string, locator: string) {
-        const [multiPage] = await Promise.all([
-            this.context.waitForEvent('page'),
-            this.page.locator(locator)
-        ]);
-        const pages = multiPage.context().pages();
-
-        console.log(`Number of pages opened: ${pages.length}`);
-        for (const page of pages) {
-            const url = page.url();
-            console.log(`URL of the page is : ${url}`);
-            const title = await page.title();
-            console.log(`Title of the page: ${title}`);
-            if (title === windowTitle) {
-                console.log(`Switching to the page with title: ${windowTitle}`);
-                await page.bringToFront();
-                return page;
-            }
-        }
-        console.log(`No page found with title: ${windowTitle}`);
-        return null;
-    }
-
     async acceptAlert(Data: string) {
         this.page.on("dialog", async (dialog) => {
             dialog.message()
             await dialog.accept(Data);
-            this.page.locator("ghfegrf").contentFrame();
             console.log('Dialog Message:', dialog.message());
         });
     }
 
-    //i:number;
-    async clickinFrame(frameLocator: string, locator: string, name: string, type: string, index: number) {
+    async clickinFrame(frameLocator: string, locator: string, name: string, type: string, index?: number) {
         await test.step(`The ${type} ${name} clicked`, async () => {
-            const frameCount = 1;
-            await this.page.locator(frameLocator).count();
+            const frameCount = await this.page.locator(frameLocator).count();
             if (frameCount > 0) {
                 await this.page.frameLocator(frameLocator).locator(locator).nth(index).click({ force: true });
             } else {
-                await this.page.locator(locator).click({ force: true });
+                await this.page.locator(locator).click();
             }
         })
     }
@@ -381,7 +330,7 @@ export abstract class PlaywrightWrapper {
 
     async mouseHover(hoverLocator: string, Menu: string) {
         await test.step(`The pointer hovers over the ${Menu} element.  `, async () => {
-            await this.page.hover(hoverLocator, { force: true });
+            await this.page.hover(hoverLocator);
         })
     }
 
@@ -563,7 +512,7 @@ export abstract class PlaywrightWrapper {
 
         this.page = (await this.context.pages())[this.context.pages().length - 1];
     }
-    
+
     switchToParentPage(): void {
         const pages = this.context.pages();
         if (pages.length > 0) {
@@ -583,4 +532,39 @@ export abstract class PlaywrightWrapper {
             throw new Error('Page at the specified index is not available');
         }
     }
+    getById(locator: string): Locator {
+        return this.page.locator(`#${locator}`)
+    }
+    getByClass(locator: string): Locator {
+        return this.page.locator(`[class='${locator}']`)
+    }
+
+    async webElementClick(attribute: "LABEL" | "PLACEHOLDER" | "TEXT" | "TITLE" | "ALTTEXT" | "ID" | "CLASS", locator: string) {
+        switch (attribute) {
+            case "LABEL":
+                await this.page.getByLabel(locator).click();
+                break;
+            case "PLACEHOLDER":
+                await this.page.getByPlaceholder(locator).click();
+                break;
+            case "TEXT":
+                await this.page.getByText(locator).click();
+                break;
+            case "TITLE":
+                await this.page.getByTitle(locator).click();
+                break;
+            case "ALTTEXT":
+                await this.page.getByAltText(locator).click();
+                break;
+            case "ID":
+                await this.getById(locator).click();
+                break;
+            case "CLASS":
+                await this.getByClass(locator).click();
+                break;
+            default:
+                throw new Error(`Unsupported attribute: ${attribute}`);
+        }
+    }
+
 }
