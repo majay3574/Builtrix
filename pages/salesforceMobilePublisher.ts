@@ -1,14 +1,19 @@
 
+import { PlaywrightWrapper } from '../helpers/playwright';
 import { SalesforceHomePage } from './salesforceHomePage';
 
 export class SalesforceMobilePublisherPage extends SalesforceHomePage {
 
 
     public async clickConfirmButton(): Promise<any> {
-        await this.clickwithnewInstance("//button[text()='Confirm']");
+        this.switchToChildPage(1);
+        await this.click("//button[text()='Confirm']", "", "");
     }
 
     public async clickProduct(): Promise<any> {
-        await this.clickwithnewInstance("span:text-is('Products')")
+        await this.click("span:text-is('Products')", "", "");
+        this.switchToParentPage();
+        this.wait('minWait');
     }
+
 }

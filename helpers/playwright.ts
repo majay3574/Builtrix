@@ -7,7 +7,7 @@ import fs from 'fs';
 
 export abstract class PlaywrightWrapper {
 
-    readonly page: Page;
+    page: Page;
     readonly context: BrowserContext;
     private static newPage: Page | null = null;
 
@@ -57,12 +57,12 @@ export abstract class PlaywrightWrapper {
             case "altText":
                 await this.page.getByAltText(locator).click();
                 break;
-           /*  case "id":
-                await (await this.getById(locator)).click();
-                break;
-            case "class":
-                await (await this.getByClass(locator)).click();
-                break; */
+            /*  case "id":
+                 await (await this.getById(locator)).click();
+                 break;
+             case "class":
+                 await (await this.getByClass(locator)).click();
+                 break; */
             default:
                 throw new Error(`Unsupported attribute: ${attribute}`);
         }
@@ -542,26 +542,6 @@ export abstract class PlaywrightWrapper {
 
     }
 
-
-
-    async childTab(locator: string): Promise<Page> {
-
-        [PlaywrightWrapper.newPage] = await Promise.all([
-            this.context.waitForEvent('page'),
-            this.page.locator(locator).click()
-        ]);
-        return PlaywrightWrapper.newPage
-    }
-    async clickwithnewInstance(selector: string) {
-        await this.getNewPage().locator(selector).click()
-        return this.getNewPage().title()
-    }
-
-    async fillwithNewInstance(selector: string, data: string) {
-        await this.getNewPage().fill(selector, data)
-    }
-
-
     async radioButton(locator: string, name: string) {
         await test.step(`Checkbox ${name} is selected`, async () => {
 
@@ -574,21 +554,33 @@ export abstract class PlaywrightWrapper {
         })
     }
 
-    /*  async waitForNewPage(action: () => Promise<void>): Promise<Page> {
-         const pagePromise = this.page.context().waitForEvent('page');
-         await action();
-         const oPage = await pagePromise;
-         await oPage.waitForLoadState();
-         return oPage;
-     }
- 
-     async switchToNewPage(action: () => Promise<void>): Promise<PlaywrightWrapper> {
-         const newPage = await this.waitForNewPage(action);
-         return new PlaywrightWrapper(oPage);
-     }
- 
-  */
+    async childTab(locator: string): Promise<void> {
 
+        [PlaywrightWrapper.newPage] = await Promise.all([
+            this.context.waitForEvent('page'),
+            this.page.locator(locator).click()
+        ]);
 
+        this.page = (await this.context.pages())[this.context.pages().length - 1];
+    }
+    
+    switchToParentPage(): void {
+        const pages = this.context.pages();
+        if (pages.length > 0) {
+            this.page = pages[0];
+            this.page.bringToFront();
+        } else {
+            throw new Error('Parent page is not available');
+        }
+    }
 
+    switchToChildPage(index: number): void {
+        const pages = this.context.pages();
+        if (pages.length > index) {
+            this.page = pages[index];
+            this.page.bringToFront();
+        } else {
+            throw new Error('Page at the specified index is not available');
+        }
+    }
 }
