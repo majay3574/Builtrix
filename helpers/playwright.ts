@@ -539,32 +539,92 @@ export abstract class PlaywrightWrapper {
         return this.page.locator(`[class='${locator}']`)
     }
 
-    async webElementClick(attribute: "LABEL" | "PLACEHOLDER" | "TEXT" | "TITLE" | "ALTTEXT" | "ID" | "CLASS", locator: string) {
-        switch (attribute) {
-            case "LABEL":
-                await this.page.getByLabel(locator).click();
-                break;
-            case "PLACEHOLDER":
-                await this.page.getByPlaceholder(locator).click();
-                break;
-            case "TEXT":
-                await this.page.getByText(locator).click();
-                break;
-            case "TITLE":
-                await this.page.getByTitle(locator).click();
-                break;
-            case "ALTTEXT":
-                await this.page.getByAltText(locator).click();
-                break;
-            case "ID":
-                await this.getById(locator).click();
-                break;
-            case "CLASS":
-                await this.getByClass(locator).click();
-                break;
-            default:
-                throw new Error(`Unsupported attribute: ${attribute}`);
-        }
+    /**
+ * Interacts with a web element based on the given attribute and action.
+ *
+ * @param {string} attribute - The type of locator to use ("LABEL", "PLACEHOLDER", "TEXT", "TITLE", "ALTTEXT", "ID", "CLASS").
+ * @param {string} locator - The value of the locator to find the element.
+ * @param {string} action - The action to perform on the element ("click" or "fill").
+ * @param {string} [data] - The data to input if the action is "fill" (optional).
+ * @throws {Error} Throws an error if an unsupported attribute or action is used.
+ */
+async interactWithElement(
+    attribute: "LABEL" | "PLACEHOLDER" | "TEXT" | "TITLE" | "ALTTEXT" | "ID" | "CLASS",
+    locator: string,
+    action: "click" | "fill",
+    data: string = ""
+): Promise<void> {
+    if (!locator) {
+        throw new Error("Locator must be provided.");
     }
+
+    if (action === "fill" && !data) {
+        throw new Error("Data must be provided for the 'fill' action.");
+    }
+
+    switch (attribute) {
+        case "LABEL":
+            if (action === "click") {
+                await this.page.getByLabel(locator).click();
+            } else {
+                await this.page.getByLabel(locator).fill(data);
+            }
+            break;
+
+        case "PLACEHOLDER":
+            if (action === "click") {
+                await this.page.getByPlaceholder(locator).click();
+            } else {
+                await this.page.getByPlaceholder(locator).fill(data);
+            }
+            break;
+
+        case "TEXT":
+            if (action === "click") {
+                await this.page.getByText(locator).click();
+            } else {
+                throw new Error("The 'fill' action is not supported for 'TEXT' attributes.");
+            }
+            break;
+
+        case "TITLE":
+            if (action === "click") {
+                await this.page.getByTitle(locator).click();
+            } else {
+                throw new Error("The 'fill' action is not supported for 'TITLE' attributes.");
+            }
+            break;
+
+        case "ALTTEXT":
+            if (action === "click") {
+                await this.page.getByAltText(locator).click();
+            } else {
+                throw new Error("The 'fill' action is not supported for 'ALTTEXT' attributes.");
+            }
+            break;
+
+        case "ID":
+            const idSelector = `#${locator}`;
+            if (action === "click") {
+                await this.page.locator(idSelector).click();
+            } else {
+                await this.page.locator(idSelector).fill(data);
+            }
+            break;
+
+        case "CLASS":
+            const classSelector = `.${locator}`;
+            if (action === "click") {
+                await this.page.locator(classSelector).click();
+            } else {
+                await this.page.locator(classSelector).fill(data);
+            }
+            break;
+
+        default:
+            throw new Error(`Unsupported attribute: ${attribute}`);
+    }
+}
+
 
 }

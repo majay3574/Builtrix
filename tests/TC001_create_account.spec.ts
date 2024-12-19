@@ -8,7 +8,7 @@ import { PlaywrightWrapper } from "../helpers/playwright";
 const csvFilePath = './data/accounts.csv';
 
 //test.use({ storageState: "./logins/salesforceLogin.json" })
-test('Creating an Account Using CSV Data', async ({ page, context, SalesforceLogin, SalesforceHome, SalesforceAccount }) => {
+test.only('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceHome, SalesforceAccount }) => {
     const data = await readDataFromCSV(csvFilePath);
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },

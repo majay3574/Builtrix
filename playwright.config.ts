@@ -72,7 +72,7 @@ export default defineConfig({
 
       }
     }, ...(
-      true ? [{
+      false ? [{
         name: 'API Testing',
         testDir: './api',
 

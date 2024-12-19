@@ -70,6 +70,11 @@ export class SalesforceAccountPage extends SalesforceHomePage {
 
     }
 
+    public async searchAccount(accountName: string) {
+        await this.interactWithElement('PLACEHOLDER', this.selectors.accounts.Searchthis, 'fill', accountName);
+        await this.keyboardAction(`[placeholder="${this.selectors.accounts.Searchthis}"]`, 'Enter', "Input", "Search This");
+    }
+
     public async closeTAB() {
         await this.click(this.selectors.accounts.closeTab, "Close TAB", "Button")
     }

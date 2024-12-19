@@ -31,6 +31,7 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
             accountNumberInput: `//label[text()='Account Number']//following::input[1]`,
             accountTypeDDBtn: "//label[text()='Type']//following::button[1]",
             industryDDBtn: `//label[text()='Industry']//following::button[1]`,
+            Searchthis: `Search this list...`,
             ownershipDDBtn: `//label[text()='Ownership']//following::button[1]`,
             billingStreetInput: `//label[text()='Billing Street']//following::textarea[1]`,
             billingCityInput: "//label[text()='Billing City']//following::input[1]",
@@ -70,7 +71,7 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
         if (pageTitle.startsWith("Login")) {
             await this.type(this.selectors.username, "Username", username);
             await this.type(this.selectors.password, "password", password);
-            await this.webElementClick('ID', this.selectors.loginBtn);
+            await this.interactWithElement('ID', this.selectors.loginBtn,'click');
             await this.wait('mediumWait')
             await this.storeState("./logins/salesforceLogin.json")
             await this.validateElementVisibility(this.selectors.applauncherIcon, "App Launcher");
