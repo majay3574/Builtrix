@@ -250,8 +250,9 @@ export abstract class PlaywrightWrapper {
 
     async clickinFrame(frameLocator: string, locator: string, name: string, type: string, index?: number) {
         await test.step(`The ${type} ${name} clicked`, async () => {
-            const frameCount = await this.page.locator(frameLocator).count();
-            if (frameCount > 0) {
+            const frameEle = this.page.frameLocator(frameLocator)
+            const elementCount = await frameEle.locator(locator).count();
+            if (elementCount > 0) {
                 await this.page.frameLocator(frameLocator).locator(locator).nth(index).click({ force: true });
             } else {
                 await this.page.locator(locator).click();
@@ -267,9 +268,9 @@ export abstract class PlaywrightWrapper {
             } catch (error) {
                 return;
             }
-            const frameCount = await this.page.frameLocator(frameLocator).locator(locator).count()
-            if (frameCount > 0) {
-                const frameEle = this.page.frameLocator(frameLocator);
+            const frameEle = this.page.frameLocator(frameLocator)
+            const elementCount = await frameEle.locator(locator).count();
+            if (elementCount > 0) {
                 try {
                     const frameVisible = await frameEle.locator('body').isVisible({ timeout: 5000 });
                     expect(frameVisible).toBeTruthy();
@@ -284,14 +285,14 @@ export abstract class PlaywrightWrapper {
 
     async verifyAndClickEleinFrame(frameLocator: string, locator: string, name: string) {
         await test.step(`The ${name} is verified`, async () => {
-            const frameCount = await this.page.locator(frameLocator).count();
-            if (frameCount > 0) {
-                const frameEle = this.page.frameLocator(frameLocator)
+            const frameEle = this.page.frameLocator(frameLocator)
+            const elementCount = await frameEle.locator(locator).count();
+            if (elementCount > 0) {
                 try {
                     expect(frameEle).toBeTruthy()
                     await this.wait('minWait')
                     const ele = frameEle.locator(locator);
-                    expect(ele).toBeVisible()
+                    await expect(ele).toBeVisible()
                     this.wait('minWait')
                     await ele.hover();
                     await ele.click();
@@ -306,8 +307,9 @@ export abstract class PlaywrightWrapper {
 
     async typeinFrame(flocator: string, locator: string, name: string, data: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
-            const frameCount = 1;
-            if (frameCount > 0) {
+            const frameLocator = this.page.frameLocator(flocator);
+            const elementCount = await frameLocator.locator(locator).count();
+            if (elementCount > 0) {
                 await this.page.frameLocator(flocator).locator(locator).clear();
                 await this.page.frameLocator(flocator).locator(locator).fill(data);
                 await this.page.keyboard.press("Enter");
