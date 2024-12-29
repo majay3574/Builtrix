@@ -3,14 +3,14 @@ import { FakerData } from "../helpers/fakerUtils"
 
 let firstName = FakerData.getFirstName()
 //test.use({ storageState: "logins/salesforceLogin.json" })
-test(` creating Lead`, async ({ SalesforceHome, SalesforceLead }) => {
+test(` creating Lead`, async ({ SalesforceLogin, SalesforceHome, SalesforceLead }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
         { type: 'TestCase', description: 'Creating Lead' },
     );
 
-    await SalesforceHome.salesforceLogin("ADMINLOGIN");
-    await SalesforceHome.verifyHomeLabel();
+    await SalesforceLogin.salesforceLogin("ADMINLOGIN");
+    await SalesforceLogin.verifyHomeLabel();
     await SalesforceHome.appLauncher();
     await SalesforceHome.viewAll();
     await SalesforceHome.searchApp("Leads");

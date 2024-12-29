@@ -1,8 +1,9 @@
-import { BrowserContext, Page } from "playwright";
+import { BrowserContext, Page } from "@playwright/test";
 import { PlaywrightWrapper } from "../helpers/playwright";
 import { credentials } from "../constants/credentialData";
 import { expect } from "playwright/test";
 import { URLConstants } from "../constants/urlConstants";
+import { selectors } from "./selectors";
 
 export class SalesforceLoginPage extends PlaywrightWrapper {
 
@@ -10,7 +11,7 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
         super(page, context);
     }
 
-    public selectors = {
+    /* public selectors = {
         username: "#username",
         password: "#password",
         loginBtn: "Login",
@@ -61,7 +62,7 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
             newAccountTag: `span[title='New Account']`,
             newAccountHeader: `h1:text-is('New Account')`,
         }
-    }
+    } */
     public async salesforceLogin(role: string) {
 
         const { username, password } = credentials[role];
@@ -69,12 +70,12 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
         await this.loadApp(URLConstants.adminURL)
         const pageTitle = await this.page.title();
         if (pageTitle.startsWith("Login")) {
-            await this.type(this.selectors.username, "Username", username);
-            await this.type(this.selectors.password, "password", password);
-            await this.interactWithElement('ID', this.selectors.loginBtn,'click');
+            await this.type(selectors.username, "Username", username);
+            await this.type(selectors.password, "password", password);
+            await this.interactWithElement('ID', selectors.loginBtn,'click');
             await this.wait('mediumWait')
             await this.storeState("./logins/salesforceLogin.json")
-            await this.validateElementVisibility(this.selectors.applauncherIcon, "App Launcher");
+            await this.validateElementVisibility(selectors.applauncherIcon, "App Launcher");
         } else {
             console.log("Login page is Skipped");
 
@@ -83,8 +84,8 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
 
 
     public async verifyHomeLabel() {
-        await this.validateElementVisibility(this.selectors.homeLabel, "Home");
-        let home = await this.getInnerText(this.selectors.homeLabel);
+        await this.validateElementVisibility(selectors.homeLabel, "Home");
+        let home = await this.getInnerText(selectors.homeLabel);
         expect(home).toEqual("Home");
     }
 

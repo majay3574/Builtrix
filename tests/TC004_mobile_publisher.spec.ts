@@ -1,13 +1,13 @@
 import { test } from "../customFixtures/salesForceFixture"
 
-test(` Mobile Publisher testCase`, async ({ SalesforceHome, SalesforceMobilePublisher }) => {
+test(` Mobile Publisher testCase`, async ({ SalesforceLogin, SalesforceHome, SalesforceMobilePublisher }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
         { type: 'TestCase', description: 'Mobile publisher multiple page' },
     );
 
-    await SalesforceHome.salesforceLogin("ADMINLOGIN");
-    await SalesforceHome.verifyHomeLabel();
+    await SalesforceLogin.salesforceLogin("ADMINLOGIN");
+    await SalesforceLogin.verifyHomeLabel();
     await SalesforceHome.clickMobilePublisher();
     await SalesforceMobilePublisher.clickConfirmButton();
     await SalesforceMobilePublisher.clickProduct();

@@ -8,7 +8,7 @@ import { PlaywrightWrapper } from "../helpers/playwright";
 const csvFilePath = './data/accounts.csv';
 
 //test.use({ storageState: "./logins/salesforceLogin.json" })
-test.only('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceHome, SalesforceAccount }) => {
+test('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceHome, SalesforceAccount }) => {
     const data = await readDataFromCSV(csvFilePath);
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
@@ -16,7 +16,7 @@ test.only('Creating an Account Using CSV Data', async ({ SalesforceLogin, Salesf
         { type: 'Test Description', description: "Creating Valid account for budget calculation" }
     );
 
-    for (const row of data) {
+    for(const row of data) {
         const { Rating, Type, Industry, Ownership, BillingStreet, BillingCity, PostalCode, BillingState, BillingCountry } = row;
         const acctName = FakerData.getRandomTitle();
         updateJSONFile<accountData>("../data/accountdata.json", { TC001: acctName });

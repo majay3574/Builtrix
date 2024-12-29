@@ -19,9 +19,9 @@ export default defineConfig({
   retries: 0,
   workers: 1,
   repeatEach: 0,
-  
+
   reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./CustomReporterConfig.ts`], ['line'], ["allure-playwright"]],
- 
+
   use: {
     actionTimeout: 20000,
     trace: 'on',
@@ -31,7 +31,7 @@ export default defineConfig({
     video: 'on',
     ignoreHTTPSErrors: true,
     bypassCSP: true,
-   // storageState: "logins/salesforceLogin.json"
+    //storageState: "logins/salesforceLogin.json"
 
   },
 
@@ -65,7 +65,7 @@ export default defineConfig({
         browserName: 'chromium', channel: 'chrome', headless: false,
         viewport: null,
         launchOptions: {
-          slowMo: 300,
+          //slowMo: 300,
           args: ["--start-maximized", "--disable-web-security", "--disable-features=IsolateOrigins,site-per-process", '--no-proxy-server']
 
         }

@@ -1,7 +1,10 @@
-import { SalesforceHomePage } from './salesforceHomePage';
+import { PlaywrightWrapper } from '../helpers/playwright';
+import { BrowserContext, Page } from "@playwright/test";
 
-export class SalesforceMobilePublisherPage extends SalesforceHomePage {
-
+export class SalesforceMobilePublisherPage extends PlaywrightWrapper {
+    constructor(page: Page, context: BrowserContext) {
+        super(page, context);
+    }
 
     public async clickConfirmButton(): Promise<any> {
         this.switchToChildPage(1);
@@ -16,7 +19,7 @@ export class SalesforceMobilePublisherPage extends SalesforceHomePage {
     }
 
     public async clickAgentforce() {
-        await this.click("span:text-is('Agentforce)", "Agentforce", "Link");
+        await this.click("span:text-is('Agentforce')", "Agentforce", "Link");
     }
 
     public async hoverPricing() {

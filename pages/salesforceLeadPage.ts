@@ -1,70 +1,71 @@
 import { Page, Locator, BrowserContext } from "@playwright/test";
-import { SalesforceHomePage } from "./salesforceHomePage";
+import { selectors } from "./selectors";
+import { PlaywrightWrapper } from "../helpers/playwright";
 
 
-export class SalesforceLeadPage extends SalesforceHomePage {
-
-   /*  constructor(page: Page, context: BrowserContext) {
+export class SalesforceLeadPage extends PlaywrightWrapper {
+    constructor(page: Page, context: BrowserContext) {
         super(page, context);
-    } */
+    }
+
     public async newButton() {
-        await this.validateElementVisibility(this.selectors.newBtn, "New Button")
-        await this.click(this.selectors.newBtn, "New", "Button")
+        await this.validateElementVisibility(selectors.newBtn, "New Button")
+        await this.click(selectors.newBtn, "New", "Button")
     }
     public async salutation(value: string) {
-        await this.click(this.selectors.lead.salutation, "Salutation", "Button")
-        await this.click(this.selectors.lead.saluationValue(value), "Salutation Value", "Button")
+        await this.click(selectors.leads.salutation, "Salutation", "Button")
+        await this.click(selectors.leads.saluationValue(value), "Salutation Value", "Button")
     }
 
     public async firstName(value: string) {
-        await this.type(this.selectors.lead.firstName, "First Name", value)
+        await this.type(selectors.leads.firstName, "First Name", value)
     }
 
     public async lastName(value: string) {
-        await this.type(this.selectors.lead.lastName, "Last Name", value)
+        await this.type(selectors.leads.lastName, "Last Name", value)
     }
 
 
     public async Company(value: string) {
-        await this.type(this.selectors.lead.company, "Last Name", value)
+        await this.type(selectors.leads.company, "Last Name", value)
     }
 
     public async saveButton() {
-        await this.click(this.selectors.saveBtn, "Save", "Button")
+        await this.click(selectors.saveBtn, "Save", "Button")
     }
 
     public async verifiTheLeadAccount(expectedValue: string) {
-        await this.validateElementVisibility(this.selectors.lead.verificationText, "Lead Name")
-        const leadName = await this.getInnerText(this.selectors.lead.verificationText)
+        await this.validateElementVisibility(selectors.leads.verificationText, "Lead Name")
+        const leadName = await this.getInnerText(selectors.leads.verificationText)
         console.log(leadName);
-        await this.verification(this.selectors.lead.verificationText, expectedValue)
+        await this.verification(selectors.leads.verificationText, expectedValue)
     }
 
     public async searchLead(value: string) {
-        await this.validateElementVisibility(this.selectors.lead.searchLeadInput, "Search Field");
-        await this.typeAndEnter(this.selectors.lead.searchLeadInput, "Search Field", value);
+        await this.validateElementVisibility(selectors.leads.searchLeadInput, "Search Field");
+        await this.typeAndEnter(selectors.leads.searchLeadInput, "Search Field", value);
     }
 
     public async leadID(userName: string) {
         await this.spinnerDisappear()
-        await this.click(this.selectors.lead.userId(userName), userName, "User Name")
+        await this.click(selectors.leads.userId(userName), userName, "User Name")
     }
 
     public async expandButton() {
-        await this.click(this.selectors.lead.expandBtn, "Expand Button", "Button")
+        await this.click(selectors.leads.expandBtn, "Expand Button", "Button")
     }
 
     public async deleteLead() {
-        await this.validateElementVisibility(this.selectors.deleteBtn, "Delete");
-        await this.click(this.selectors.deleteBtn, "Delete", "Button");
+        await this.validateElementVisibility(selectors.deleteBtn, "Delete");
+        await this.click(selectors.deleteBtn, "Delete", "Button");
     }
 
     public async deletePopUP() {
-        await this.click(this.selectors.deletePopUp, "Delete", "Button")
+        await this.click(selectors.deletePopUp, "Delete", "Button")
     }
 
     public async verifiTheDeletedData() {
         await this.page.waitForLoadState('load')
-        await this.verification(this.selectors.noItemToDisplay, "No items to display")
+        await this.verification(selectors.noItemToDisplay, "No items to display")
     }
 }
