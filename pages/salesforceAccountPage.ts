@@ -73,6 +73,7 @@ export class SalesforceAccountPage extends PlaywrightWrapper {
         expect(accountName).toContain(value)
 
     }
+    
 
     public async searchAccount(accountName: string) {
         await this.interactWithElement('PLACEHOLDER', selectors.accounts.Searchthis, 'fill', accountName);

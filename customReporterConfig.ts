@@ -1,11 +1,10 @@
 import { Reporter, TestCase, TestError, TestResult, TestStep } from "@playwright/test/reporter";
-const winston = require('winston');
+import winston from 'winston';
 
 const customFormat = winston.format.combine(
     winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     winston.format.printf(({ level, message, timestamp }) => `[${timestamp}] ${level.toUpperCase()}: ${message}`)
 );
-
 
 const logger = winston.createLogger({
     level: 'info',
@@ -20,38 +19,26 @@ const logger = winston.createLogger({
 
 // Custom Playwright Reporter
 class CustomReporter implements Reporter {
-    onTestBegin(test: TestCase): void {
-        logger.info(`Test Case Started : ${test.title}`);
+    onBegin(config: any, suite: any) {
+        logger.info(`Starting the run with ${suite.allTests().length} tests`);
     }
 
-    onTestEnd(test: TestCase, result: TestResult): void {
-        logger.info(`Test Case Completed : ${test.title} Status : ${result.status}`);
+    onTestBegin(test: TestCase) {
+        logger.info(`Starting test ${test.title}`);
     }
 
-    onStepBegin(test: TestCase, result: TestResult, step: TestStep): void {
-        if (step.category === `test.step`) {
-            logger.info(`Executing Step : ${step.title}`);
+    onTestEnd(test: TestCase, result: TestResult) {
+        if (result.status === 'passed') {
+            logger.info(`Test ${test.title} passed`);
+        } else if (result.status === 'failed') {
+            logger.error(`Test ${test.title} failed: ${result.error?.message}`);
+        } else if (result.status === 'skipped') {
+            logger.warn(`Test ${test.title} skipped`);
         }
     }
 
-    onStepEnd(test: TestCase, result: TestResult, step: TestStep): void {
-        if (step.category === `test.step`) {
-            logger.info(
-                `Completed Step : ${step.title} - ${step.error ? `Error: ${step.error.message}` : 'Success'}`
-            );
-        }
-    }
-
-    onError(error: TestError): void {
-        logger.error(`Test Error: ${error.message}`);
-    }
-
-    onBegin(config: any, suite: any): void {
-        logger.info(`Test run started with ${suite.allTests().length} test(s).`);
-    }
-
-    onEnd(result: any): void {
-        logger.info(`Test run completed with status: ${result.status.toUpperCase()}`);
+    onEnd(result: any) {
+        logger.info(`Finished the run: ${result.status}`);
     }
 }
 

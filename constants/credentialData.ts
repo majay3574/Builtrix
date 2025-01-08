@@ -11,7 +11,7 @@ export let credentials = {
 
     ADMINLOGIN: {
         username: "majay3574@gmail.com",
-        password: "Ajaymichael@123"
+        password: "Ajaymichael@007"
     },
     USERLOGIN: {
         username: "Ranjini",
