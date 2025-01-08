@@ -3,8 +3,6 @@ import { FakerData } from "../helpers/fakerUtils"
 import { readDataFromCSV } from '../helpers/csvUtil';
 import { updateJSONFile } from "../helpers/jsonDataHandler";
 import { accountData } from "../data/account.interface";
-import { SalesforceHomePage } from "../pages/salesforceHomePage";
-import { PlaywrightWrapper } from "../helpers/playwright";
 const csvFilePath = './data/accounts.csv';
 
 //test.use({ storageState: "./logins/salesforceLogin.json" })
