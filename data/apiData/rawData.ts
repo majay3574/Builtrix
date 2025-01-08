@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { FakerData } from '../../helpers/fakerUtils';
+import { faker } from '@faker-js/faker';
 // dotenv.config({ path: '../../data/apiData/oauthData.env' });
 require('dotenv').config({ path: './data/apiData/oauthData.env' });
 
@@ -16,3 +17,17 @@ export const createLeaddata = {
     "LastName": FakerData.getLastName(),
     "Company": "Qeagle"
 };
+
+export const updateLeadData = {
+
+    "FirstName": FakerData.getFirstName(),
+    "Title": "SDET",
+    "Street": FakerData.getStreet(),
+    "City": FakerData.getCity(),
+    "State": FakerData.getState(),
+    "PostalCode": FakerData.getPinCode(),
+    "Country": FakerData.getCountry(),
+    "MobilePhone": FakerData.getMobileNumber(),
+    "Email": FakerData.getEmail(),
+    "Website": FakerData.getWebsite(),
+}

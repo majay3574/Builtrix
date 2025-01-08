@@ -30,14 +30,32 @@ export class FakerData {
         return faker.location.streetAddress();
     }
 
+    static getCity(): string {
+        return faker.location.city();
+    }
+
+    static getStreet(): string {
+        return faker.location.street();
+    }
+
     static getPinCode() {
         return faker.location.zipCode('######');
     }
 
+    static getState(): string {
+        return faker.location.state();
+    }
+
+    static getCountry(): string {
+        return faker.location.country();
+    }   
     static addressName(): string {
         return `${faker.location.countryCode()} ${faker.location.county()}`;
     }
 
+    static getWebsite(): string {
+        return faker.internet.url();
+    }
     static getAwardName() {
         const awardName = faker.helpers.arrayElement(["Excellency Award", "Leadership Award", "Trailblazer Award", "Pioneer Award"])
         return awardName

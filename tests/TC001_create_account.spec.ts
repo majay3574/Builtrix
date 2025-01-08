@@ -19,7 +19,7 @@ test('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceH
     for(const row of data) {
         const { Rating, Type, Industry, Ownership, BillingStreet, BillingCity, PostalCode, BillingState, BillingCountry } = row;
         const acctName = FakerData.getRandomTitle();
-        updateJSONFile<accountData>("../data/accountdata.json", { TC001: acctName });
+        updateJSONFile<accountData>("../data/accountdata.json", { TC001: acctName});
         await SalesforceLogin.salesforceLogin("ADMINLOGIN");
         //await SalesforceLogin.verifyHomeLabel();
         await SalesforceHome.appLauncher();

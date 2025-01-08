@@ -13,7 +13,7 @@ export async function httpRequest(
     // Check if userData is provided and determine if it's FormData
     if (userData) {
         isFormData = Object.values(userData).some(value => value instanceof Blob || typeof value === 'string');
-        
+
         if (isFormData) {
             // If userData contains Blobs or strings, use FormData
             requestBody = new FormData();
@@ -48,7 +48,7 @@ export async function httpRequest(
 
         return {
             data: response.data,
-            status: response.status
+            status: response.status + ' ' + response.statusText,
         };
 
     } catch (error) {
