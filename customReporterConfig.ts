@@ -11,13 +11,12 @@ const logger = winston.createLogger({
     format: customFormat,
     transports: [
         new winston.transports.Console({ level: 'debug' }),
-        new winston.transports.File({ filename: 'logs/info.log', level: 'info' }), 
+        new winston.transports.File({ filename: 'logs/info.log', level: 'info' }),
         new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-        new winston.transports.File({ filename: 'logs/debug.log', level: 'debug' }), 
+        new winston.transports.File({ filename: 'logs/debug.log', level: 'debug' }),
     ],
 });
 
-// Custom Playwright Reporter
 class CustomReporter implements Reporter {
     onBegin(config: any, suite: any) {
         logger.info(`Starting the run with ${suite.allTests().length} tests`);
@@ -25,6 +24,13 @@ class CustomReporter implements Reporter {
 
     onTestBegin(test: TestCase) {
         logger.info(`Starting test ${test.title}`);
+    }
+    onStep(test: TestCase, result: TestResult, step: TestStep) {
+        if (step.error) {
+            logger.error(`Step ${step.title} for test ${test.title} failed: ${step.error.message}`);
+        } else {
+            logger.info(`Step ${step.title} for test ${test.title} completed`);
+        }
     }
 
     onTestEnd(test: TestCase, result: TestResult) {
