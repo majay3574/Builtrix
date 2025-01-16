@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const timestamp = Date.now();
-const reportDir = `./reporter/playwright-reports-${timestamp}`;
+//const reportDir = `./reporter/playwright-reports-${timestamp}`;
 export default defineConfig({
   timeout: 550000,
 
@@ -17,8 +17,8 @@ export default defineConfig({
   workers: 1,
   repeatEach: 0,
 
-  reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./customReporterConfig.ts`], ['line'], ["allure-playwright"]],
-
+  //reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./customReporterConfig.ts`], ['line'], ["allure-playwright"]],
+  reporter: [['html', { open: 'always' }], [`./customReporterConfig.ts`], ['line'], ["allure-playwright"]],
   use: {
     actionTimeout: 20000,
     trace: 'on',
