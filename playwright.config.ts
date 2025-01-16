@@ -1,7 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import { channel } from 'diagnostics_channel';
-import { OrtoniReportConfig } from 'ortoni-report';
-
 
 const timestamp = Date.now();
 const reportDir = `./reporter/playwright-reports-${timestamp}`;
@@ -20,7 +17,7 @@ export default defineConfig({
   workers: 1,
   repeatEach: 0,
 
-  reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./CustomReporterConfig.ts`], ['line'], ["allure-playwright"]],
+  reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./customReporterConfig.ts`], ['line'], ["allure-playwright"]],
 
   use: {
     actionTimeout: 20000,
