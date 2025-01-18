@@ -1,13 +1,13 @@
 {
-  "name": "expertus_one_playwright",
+  "name": "salesforce-playwright",
   "version": "1.0.0",
-  "description": "Playwright Automation for Expertus One",
+  "description": "Playwright Automation for SalesForce",
   "main": "index.js",
   "scripts": {
     "posttest": "npx ts-node -r dotenv/config ./jira/log-a-defect.ts"
   },
   "keywords": [],
-  "author": "Qeagle",
+  "author": "Ajay Michael",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.49.0",

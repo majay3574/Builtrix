@@ -3,12 +3,12 @@ import { defineConfig, devices } from '@playwright/test';
 const timestamp = Date.now();
 //const reportDir = `./reporter/playwright-reports-${timestamp}`;
 export default defineConfig({
-  timeout: 550000,
+  timeout: 55 * 10000, //55_000
 
   expect: {
     timeout: 20000
-
-  },
+  }
+  ,
   testDir: './tests',
   // globalSetup: require.resolve('utils/jiraReport.ts'),
 
