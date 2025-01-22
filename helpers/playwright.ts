@@ -329,6 +329,25 @@ export abstract class PlaywrightWrapper {
         })
     }
 
+    async selectDropdown(selector: string, options: { value?: string; index?: number; label?: string }) {
+        await test.step(`Selecting from dropdown using ${JSON.stringify(options)}`, async () => {
+            const dropdown = await this.page.locator(selector);
+
+            if (options.value) {
+                await dropdown.selectOption({ value: options.value });
+                console.log(`Selected by value: ${options.value}`);
+            } else if (options.index !== undefined) {
+                await dropdown.selectOption({ index: options.index });
+                console.log(`Selected by index: ${options.index}`);
+            } else if (options.label) {
+                await dropdown.selectOption({ label: options.label });
+                console.log(`Selected by label: ${options.label}`);
+            } else {
+                throw new Error('No valid option provided. Please specify value, index, or label.');
+            }
+        });
+    }
+
     async mouseHover(hoverLocator: string, Menu: string) {
         await test.step(`The pointer hovers over the ${Menu} element.  `, async () => {
             await this.page.hover(hoverLocator);
