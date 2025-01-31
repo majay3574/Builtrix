@@ -10,7 +10,6 @@ export default defineConfig({
   }
   ,
   testDir: './tests',
-  // globalSetup: require.resolve('utils/jiraReport.ts'),
 
   fullyParallel: false,
   retries: 0,
