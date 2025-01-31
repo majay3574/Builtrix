@@ -24,10 +24,11 @@ export default defineConfig({
     trace: 'on',
     headless: false,
     screenshot: "on",
-    browserName: 'chromium',
     video: 'on',
     ignoreHTTPSErrors: true,
     bypassCSP: true,
+    permissions: ['camera']
+
     //storageState: "logins/salesforceLogin.json"
 
   },
@@ -41,7 +42,7 @@ export default defineConfig({
     /*  {
        name: 'Chromium',
        use: {
-         ...devices['Desktop Chromium'],=
+         ...devices['Desktop Chromium'],
          ignoreHTTPSErrors: true,
          headless: false,
          video: 'on',
