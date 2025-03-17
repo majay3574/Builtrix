@@ -11,9 +11,10 @@ export default defineConfig({
   ,
   testDir: './tests',
 
-  fullyParallel: false,
+  fullyParallel: true,
   retries: 0,
-  workers: 1,
+  //workers: "100%",
+  workers:2,
   repeatEach: 0,
 
   //reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./customReporterConfig.ts`], ['line'], ["allure-playwright"]],
@@ -26,9 +27,9 @@ export default defineConfig({
     video: 'on',
     ignoreHTTPSErrors: true,
     bypassCSP: true,
-    permissions: ['camera']
+    permissions: ['camera'],
 
-    //storageState: "logins/salesforceLogin.json"
+    storageState: "logins/salesforceLogin.json"
 
   },
 

@@ -6,12 +6,13 @@ export class SalesforceMobilePublisherPage extends PlaywrightWrapper {
         super(page, context);
     }
 
-    public async clickConfirmButton(): Promise<any> {
+    /* public async clickConfirmButton(): Promise<any> {
         this.switchToChildPage(1);
         await this.click("//button[text()='Confirm']", "Confirm", "Button");
-    }
+    } */
 
     public async clickProduct(): Promise<any> {
+        this.switchToChildPage(1);
         await this.click("span:text-is('Products')", "Product", "Button");
         /*   this.switchToParentPage();
           this.wait('minWait'); */

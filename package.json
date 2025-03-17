@@ -26,18 +26,12 @@
     "dotenv": "^16.4.5",
     "glob": "^11.0.0",
     "jira-client": "^8.2.2",
-    "jsdom": "^24.1.0",
-    "mailslurp-client": "^15.20.2",
     "mysql2": "^3.10.2",
-    "ortoni-report": "^2.0.3",
     "pg": "^8.12.0",
     "playwright": "^1.43.1",
     "playwright-indexeddb": "^1.0.0",
     "tesseract.ts": "^1.1.2",
     "typescript": "^5.5.4",
-    "video.js": "^8.18.1",
-    "videojs-ads": "^0.1.0",
-    "videojs-contrib-ads": "^7.5.2",
     "winston": "^3.17.0",
     "xlsx": "^0.18.5"
   }

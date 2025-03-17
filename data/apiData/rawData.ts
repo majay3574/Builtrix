@@ -1,8 +1,8 @@
-import dotenv from 'dotenv';
+
 import { FakerData } from '../../helpers/fakerUtils';
-import { faker } from '@faker-js/faker';
-// dotenv.config({ path: '../../data/apiData/oauthData.env' });
-require('dotenv').config({ path: './data/apiData/oauthData.env' });
+import dotenv from 'dotenv';
+dotenv.config({ path: './data/apiData/oauthData.env' });
+
 
 
 export const oauthData = {

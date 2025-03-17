@@ -105,6 +105,7 @@ export abstract class PlaywrightWrapper {
      * @param {string} name - The name of the element.
      * @param {string} type - The type of the element
      */
+
     protected async click(locator: string, name: string, type: string) {
         await test.step(`The ${name} ${type} clicked`, async () => {
             await this.page.waitForSelector(locator, { state: 'visible' });

@@ -38,7 +38,8 @@ export class SalesforceLeadPage extends PlaywrightWrapper {
         await this.validateElementVisibility(selectors.leads.verificationText, "Lead Name")
         const leadName = await this.getInnerText(selectors.leads.verificationText)
         console.log(leadName);
-        await this.verification(selectors.leads.verificationText, expectedValue)
+        await this.verification(selectors.leads.verificationText, expectedValue);
+      
     }
 
     public async searchLead(value: string) {

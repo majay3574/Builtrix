@@ -4,6 +4,8 @@ import { SalesforceLeadPage } from '../pages/salesforceLeadPage'
 import { SalesforceAccountPage } from '../pages/salesforceAccountPage'
 import { SalesforceLoginPage } from '../pages/salesforceLogin'
 import { SalesforceMobilePublisherPage } from '../pages/salesforceMobilePublisher'
+import fs from 'fs';
+import path from 'path';
 
 type salesForceFixture = {
     SalesforceHome: SalesforceHomePage
@@ -41,6 +43,29 @@ export const test = baseTest.extend<salesForceFixture>({
 
 
 })
+
+
+
+/* test.afterEach(async ({ page }, testInfo) => {
+    const timestamp = Date.now();
+    const sanitizedTitle = testInfo.title.replace(/\s+/g, '_'); // Remove spaces
+
+    // Create a directory for each test
+    const testDir = path.join('screenshots', sanitizedTitle);
+    if (!fs.existsSync(testDir)) {
+        fs.mkdirSync(testDir, { recursive: true });
+    }
+
+    async function attachScreenshot(stepName: string) {
+        const screenshotPath = path.join(testDir, `${stepName}.png`);
+        await page.screenshot({ path: screenshotPath, fullPage: true }); 
+
+        await testInfo.attach(`Screenshot - ${stepName}`, { body: fs.readFileSync(screenshotPath), contentType: 'image/png' });
+    }
+
+    await attachScreenshot(`${sanitizedTitle}_${timestamp}`);
+}); */
+
 /* test.beforeAll(async ({ SalesforceLogin }) => {
     await SalesforceLogin.salesforceLogin("ADMINLOGIN")
 });

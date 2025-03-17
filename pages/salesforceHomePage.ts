@@ -29,7 +29,7 @@ export class SalesforceHomePage extends PlaywrightWrapper {
     }
 
     public async clickMobilePublisher() {
-        await this.childTab("//span[text()='Learn More']");
+        await this.childTab("//button[text()='Learn More']");
     }
 
 
