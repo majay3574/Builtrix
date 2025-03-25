@@ -1,5 +1,5 @@
 import { test as baseTest } from '@playwright/test'
-import { SalesforceHomePage } from '../pages/salesforceHomePage'
+import { SalesforceHomePage } from "../pages/salesforceHomePage"
 import { SalesforceLeadPage } from '../pages/salesforceLeadPage'
 import { SalesforceAccountPage } from '../pages/salesforceAccountPage'
 import { SalesforceLoginPage } from '../pages/salesforceLogin'
@@ -21,6 +21,11 @@ export const test = baseTest.extend<salesForceFixture>({
         const salesforceLogin = new SalesforceLoginPage(page, context);
         await use(salesforceLogin);
     },
+
+    /*  SalesforceHome: async ({ page, context }, use) => {
+         const SalesforceHome = new SalesforceHomePage(page, context);
+         await use(SalesforceHome);
+     }, */
 
     SalesforceHome: async ({ page, context }, use) => {
         const SalesforceHome = new SalesforceHomePage(page, context);

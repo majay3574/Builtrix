@@ -8,7 +8,6 @@ test(` creating Lead`, async ({ SalesforceLogin, SalesforceHome, SalesforceLead 
         { type: 'Author', description: 'Ajay Michael' },
         { type: 'TestCase', description: 'Creating Lead' },
     );
-
     await SalesforceLogin.salesforceLogin("ADMINLOGIN");
     await SalesforceLogin.verifyHomeLabel();
     await SalesforceHome.appLauncher();
