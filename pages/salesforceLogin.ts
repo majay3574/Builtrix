@@ -20,9 +20,10 @@ export class SalesforceLoginPage extends PlaywrightWrapper {
         if (pageTitle.startsWith("Login")) { // Check if the page is a login page
             await this.type(selectors.username, "Username", username); // Enter username
             await this.type(selectors.password, "password", password); // Enter password
-            await this.interactWithElement('ID', selectors.loginBtn,'click'); // Click login button
+            await this.interactWithElement('ID', selectors.loginBtn, 'click'); // Click login button
             await this.wait('mediumWait') // Wait for the page to load after login
             await this.validateElementVisibility(selectors.applauncherIcon, "App Launcher"); // Verify app launcher is visible
+            await this.storeState("./logins/salesforce.json")
         } else {
             console.log("Login page is Skipped"); // Log message if login page is already bypassed
         }

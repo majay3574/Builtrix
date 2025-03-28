@@ -5,7 +5,7 @@ import { updateJSONFile } from "../helpers/jsonDataHandler";
 import { accountData } from "../data/account.interface";
 const csvFilePath = './data/accounts.csv';
 
-//test.use({ storageState: "./logins/salesforceLogin.json" })
+test.use({ storageState: "./logins/salesforceLogin.json" })
 test('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceHome, SalesforceAccount }) => {
     const data = await readDataFromCSV(csvFilePath);
     test.info().annotations.push(
