@@ -63,6 +63,7 @@ export interface newData {
 updateJSONFile<newData>('../data/newData.json', { tc071a: 'new value' });
 /*
 
+
 /**
  * Reads a JSON file from the provided file path and returns a random item from the array in the file.
  * 
@@ -95,6 +96,11 @@ export function saveDataToJsonFile(filename: string, data: any): void {
   });
 }
 
+
+export function serialization(data: object): string {
+  // Pretty format for better readability
+  return JSON.stringify(data, null, 2); 
+}
 
 
 

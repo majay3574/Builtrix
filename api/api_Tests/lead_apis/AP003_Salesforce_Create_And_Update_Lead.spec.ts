@@ -6,15 +6,13 @@ let instanceURL: any, accessTokken: any
 let response: any, createdUser: string
 test.describe(`Salesforce_Create_And_Update_Lead`, () => {
     test.describe.configure({ mode: 'serial' })
-    test(`Generate Access Tokken`, async () => {
+    test.beforeAll(`Generate Access Tokken`, async () => {
         [instanceURL, accessTokken] = await generateAccessToken();
-        console.log(instanceURL, accessTokken);
     })
 
     test(`Create Lead from Salesforce`, async () => {
         [response, createdUser] = await createLead(instanceURL, accessTokken);
-        console.log(response,
-            `${createdUser} Successfully Created`
+        console.log(response, `${createdUser}`
         );
 
     })
@@ -25,7 +23,7 @@ test.describe(`Salesforce_Create_And_Update_Lead`, () => {
 
     })
 
-    test(`Retrive Created Lead from SalesForce`, async () => {
+    test(`Verify whether the lead is updated `, async () => {
         let response = await GetcreatedLead(instanceURL, accessTokken, createdUser);
         console.log(response);
 

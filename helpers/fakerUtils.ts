@@ -5,20 +5,23 @@ import fs from 'fs'
 
 
 export class FakerData {
-
+    // getFirstName generates a random first name
     static getFirstName(): string {
         return faker.person.firstName();
     }
+    // getLastName generates a random last name
     static getLastName(): string {
         return faker.person.lastName();
     }
+    // getOrganizationName generates a random organization name
     static getOrganizationName() {
         return capitalizeFirstLetter(faker.company.buzzNoun())
     }
+    //getcurrentYear generates a random year
     static getcurrentYear() {
         return `${faker.date.anytime().getFullYear() - 2}`;
     }
-
+    //getMobileNumber generates a random mobile number
     static getMobileNumber(): string {
         return getPhoneNumber();
     }
@@ -48,7 +51,7 @@ export class FakerData {
 
     static getCountry(): string {
         return faker.location.country();
-    }   
+    }
     static addressName(): string {
         return `${faker.location.countryCode()} ${faker.location.county()}`;
     }
