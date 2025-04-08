@@ -5,21 +5,23 @@ import fs from 'fs';
 
 
 
+
 export abstract class PlaywrightWrapper {
 
     page: Page;
     readonly context: BrowserContext;
     private static newPage: Page | null = null;
 
+    constructor(page: Page, context: BrowserContext,) {
+        this.page = page;
+        this.context = context;
+    }
+
     protected getNewPage(): Page {
         if (!PlaywrightWrapper.newPage) {
             throw new Error('New tab is not initialized. Did you forget to call childTab()?');
         }
         return PlaywrightWrapper.newPage;
-    }
-    constructor(page: Page, context: BrowserContext,) {
-        this.page = page;
-        this.context = context;
     }
 
     /**
@@ -46,8 +48,7 @@ export abstract class PlaywrightWrapper {
    */
     protected async type(locator: string, name: string, data: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
-
-
+            await this.page.waitForSelector(locator, { state: 'visible' });
             await this.page.locator(locator).clear();
             await this.page.locator(locator).fill(data);
 
@@ -64,6 +65,7 @@ export abstract class PlaywrightWrapper {
      */
     protected async fillAndEnter(locator: string, name: string, data: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
+
             await this.page.locator(locator).clear();
             await this.page.fill(locator, data, { force: true })
             await this.page.focus(locator)
@@ -352,6 +354,7 @@ export abstract class PlaywrightWrapper {
 
     protected async mouseHover(hoverLocator: string, Menu: string) {
         await test.step(`The pointer hovers over the ${Menu} element.  `, async () => {
+            await this.page.waitForSelector(hoverLocator, { state: 'visible' });
             await this.page.hover(hoverLocator);
         })
     }

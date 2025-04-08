@@ -1,58 +1,91 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 
-export async function httpRequest(
-    method: 'get' | 'post' | 'put' | 'delete' | 'patch',
-    endPoint: string,
-    userData?: Record<string, any>,
-    customHeaders?: Record<string, string>,
-    additionalConfig?: AxiosRequestConfig
-): Promise<any> {
-    let requestBody: any;
-    let isFormData = false;
+export type RequestContentType =
+  | 'json'
+  | 'form-data'
+  | 'x-www-form-urlencoded'
+  | 'binary'
+  | 'graphql';
 
-    // Check if userData is provided and determine if it's FormData
-    if (userData) {
-        isFormData = Object.values(userData).some(value => value instanceof Blob || typeof value === 'string');
+interface HttpRequestOptions {
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  endPoint: string;
+  userData?: Record<string, any> | FormData | Blob | string;
+  customHeaders?: Record<string, string>;
+  additionalConfig?: AxiosRequestConfig;
+  contentType?: RequestContentType;
+}
 
-        if (isFormData) {
-            // If userData contains Blobs or strings, use FormData
-            requestBody = new FormData();
-            Object.entries(userData).forEach(([key, value]) => {
-                requestBody.append(key, value);
-            });
-        } else {
-            // Otherwise, treat userData as JSON
-            requestBody = JSON.stringify(userData);
-        }
-    }
+export async function httpRequest({
+  method,
+  endPoint,
+  userData,
+  customHeaders = {},
+  additionalConfig = {},
+  contentType = 'json',
+}: HttpRequestOptions): Promise<any> {
+  let requestBody: any = undefined;
+  const headers: Record<string, string> = {
+    Connection: 'keep-alive',
+    ...customHeaders,
+  };
 
-    try {
-        const headers = {
-            "Content-Type": isFormData ? "multipart/form-data" : "application/json",
-            "Connection": "keep-alive",
-            ...customHeaders,
-        };
+  switch (contentType) {
+    case 'json':
+      headers['Content-Type'] = 'application/json';
+      requestBody = JSON.stringify(userData);
+      break;
 
-        const config: AxiosRequestConfig = {
-            headers,
-            ...additionalConfig
-        };
-
-        // Use axios method based on the specified HTTP method
-        const response: AxiosResponse<any> = await axios({
-            method,
-            url: endPoint,
-            data: method !== 'get' ? requestBody : undefined, // Set request body only for non-GET requests
-            ...config
+    case 'form-data':
+      headers['Content-Type'] = 'multipart/form-data';
+      if (userData instanceof FormData) {
+        requestBody = userData;
+      } else {
+        requestBody = new FormData();
+        Object.entries(userData || {}).forEach(([key, value]) => {
+          requestBody.append(key, value);
         });
+      }
+      break;
 
-        return {
-            data: response.data,
-            status: response.status + ' ' + response.statusText,
-        };
+    case 'x-www-form-urlencoded':
+      headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      requestBody = new URLSearchParams(userData as Record<string, string>).toString();
+      break;
 
-    } catch (error) {
-        console.error(`Error making ${method.toUpperCase()} request:`, error);
-        throw error;
-    }
+    case 'binary':
+      headers['Content-Type'] = 'application/octet-stream';
+      requestBody = userData;
+      break;
+
+    case 'graphql':
+      headers['Content-Type'] = 'application/json';
+      requestBody = JSON.stringify({
+        query: (userData as any)?.query,
+        variables: (userData as any)?.variables || {},
+      });
+      break;
+  }
+
+  try {
+    const config: AxiosRequestConfig = {
+      headers,
+      ...additionalConfig,
+    };
+
+    const response: AxiosResponse<any> = await axios({
+      method,
+      url: endPoint,
+      data: method !== 'GET' ? requestBody : undefined,
+      ...config,
+    });
+
+    return {
+      data: response.data,
+      status: `${response.status} ${response.statusText}`,
+    };
+  } catch (error) {
+    console.error(`Error making ${method.toUpperCase()} request:`, error);
+    throw error;
+  }
 }
