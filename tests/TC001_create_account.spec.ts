@@ -3,9 +3,10 @@ import { FakerData } from "../helpers/fakerUtils"
 import { readDataFromCSV } from '../helpers/csvUtil';
 import { updateJSONFile } from "../helpers/jsonDataHandler";
 import { accountData } from "../data/account.interface";
+import { SalesforceLoginPage } from "../pages/salesforceLogin";
 const csvFilePath = './data/accounts.csv';
 
-test.use({ storageState: "./logins/salesforceLogin.json" })
+//test.use({ storageState: "logins/salesforceLogin.json" })
 test('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceHome, SalesforceAccount }) => {
     const data = await readDataFromCSV(csvFilePath);
     test.info().annotations.push(
@@ -14,10 +15,10 @@ test('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceH
         { type: 'Test Description', description: "Creating Valid account for budget calculation" }
     );
 
-    for(const row of data) {
+    for (const row of data) {
         const { Rating, Type, Industry, Ownership, BillingStreet, BillingCity, PostalCode, BillingState, BillingCountry } = row;
         const acctName = FakerData.getRandomTitle();
-        updateJSONFile<accountData>("../data/accountdata.json", { TC001: acctName});
+        updateJSONFile<accountData>("../data/accountdata.json", { TC001: acctName });
         await SalesforceLogin.salesforceLogin("ADMINLOGIN");
         //await SalesforceLogin.verifyHomeLabel();
         await SalesforceHome.appLauncher();
@@ -38,6 +39,5 @@ test('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceH
         await SalesforceAccount.billingCountry(BillingCountry);
         await SalesforceAccount.saveButton()
         await SalesforceAccount.verifiAccountName(acctName)
-        //await SalesforceAccount.closeTAB()
     }
 });

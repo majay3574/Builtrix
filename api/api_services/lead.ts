@@ -1,6 +1,7 @@
 import url from "../../data/apiData/url.json";
-import { createLeaddata, oauthData, updateLeadData } from '../../data/apiData/rawData';
+import { createLeaddata, updateLeadData } from '../../data/apiData/rawData';
 import { httpRequest } from "../../helpers/requestUtils";
+import { assertResponse, assertStatus } from "../../helpers/verificationUtils";
 
 const baseURL = url.leadEndPoint;
 
@@ -14,8 +15,9 @@ export async function createLead(instanceUrl: string, accessToken: string) {
             'Authorization': `Bearer ${accessToken}`
         }
     });
-
     const createdUser = response.data.id;
+    await assertResponse(response.data.success, true)
+    await assertStatus(response.status, "201 Created");
     return [response, createdUser];
 }
 
@@ -28,8 +30,9 @@ export async function GetcreatedLead(instanceUrl: string, accessToken: string, l
             'Authorization': `Bearer ${accessToken}`
         }
     });
-
+    await assertResponse(response.status, "200 OK");
     return response;
+
 }
 
 export async function patchCreatedLead(instanceUrl: string, accessToken: string, leadId: any) {

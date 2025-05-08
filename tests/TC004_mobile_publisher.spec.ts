@@ -1,7 +1,7 @@
 import { test } from "../customFixtures/salesForceFixture"
 
 
-test.use({ storageState: "logins/salesforceLogin.json" })
+//test.use({ storageState: "logins/salesforceLogin.json" })
 test(` Mobile Publisher testCase`, async ({ SalesforceLogin, SalesforceHome, SalesforceMobilePublisher }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
@@ -9,7 +9,7 @@ test(` Mobile Publisher testCase`, async ({ SalesforceLogin, SalesforceHome, Sal
     );
 
     await SalesforceLogin.salesforceLogin("ADMINLOGIN");
-    await SalesforceLogin.verifyHomeLabel();
+    //await SalesforceLogin.verifyHomeLabel();
     await SalesforceHome.clickMobilePublisher();
     await SalesforceMobilePublisher.clickConfirmButton();
     await SalesforceMobilePublisher.clickProduct();

@@ -4,8 +4,6 @@ import { SalesforceLeadPage } from '../pages/salesforceLeadPage'
 import { SalesforceAccountPage } from '../pages/salesforceAccountPage'
 import { SalesforceLoginPage } from '../pages/salesforceLogin'
 import { SalesforceMobilePublisherPage } from '../pages/salesforceMobilePublisher'
-import fs from 'fs';
-import path from 'path';
 
 type salesForceFixture = {
     SalesforceHome: SalesforceHomePage
@@ -45,8 +43,6 @@ export const test = baseTest.extend<salesForceFixture>({
         const SalesforceMobilePublisher = new SalesforceMobilePublisherPage(page, context);
         await use(SalesforceMobilePublisher);
     },
-
-
 })
 
 

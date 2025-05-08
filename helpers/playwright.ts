@@ -11,6 +11,7 @@ export abstract class PlaywrightWrapper {
     page: Page;
     readonly context: BrowserContext;
     private static newPage: Page | null = null;
+    protected testInfo?: { title: string };
 
     constructor(page: Page, context: BrowserContext,) {
         this.page = page;
@@ -32,7 +33,7 @@ export abstract class PlaywrightWrapper {
     public async loadApp(url: string) {
         try {
             await this.page.goto(url); // Increased timeout for 60 seconds
-            console.log(`Successfully loaded the URL: ${url}`);
+            //console.log(`Successfully loaded the URL: ${url}`);
         } catch (error) {
             console.log(`Error loading the page at ${url}:`);
             throw new Error(`Failed to load the page at ${url}`);
@@ -46,12 +47,11 @@ export abstract class PlaywrightWrapper {
    * @param {string} name - The name of the textbox element.
    * @param {string} data - The data to be typed into the textbox.
    */
-    protected async type(locator: string, name: string, data: string) {
+    protected async type(locator: string, name: string, data: string, description?: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
             await this.page.waitForSelector(locator, { state: 'visible' });
             await this.page.locator(locator).clear();
             await this.page.locator(locator).fill(data);
-
         }
         )
     }
@@ -108,15 +108,17 @@ export abstract class PlaywrightWrapper {
      * @param {string} type - The type of the element
      */
 
-    protected async click(locator: string, name: string, type: string) {
+    protected async click(locator: string, name: string, type: string, description?: string) {
         await test.step(`The ${name} ${type} clicked`, async () => {
             await this.page.waitForSelector(locator, { state: 'visible' });
             await this.page.locator(locator).click();
+
         });
     }
 
     protected async forceClick(locator: string, name: string, type: string) {
         await test.step(`The ${name} ${type} clicked`, async () => {
+
             await this.page.waitForSelector(locator, { state: 'visible' });
             await this.page.locator(locator).click({ force: true });
         });
@@ -244,7 +246,7 @@ export abstract class PlaywrightWrapper {
         return null;
     }
 
-    protected async acceptAlert(Data: string) {
+    protected async acceptAlert(Data?: string) {
         this.page.on("dialog", async (dialog) => {
             dialog.message()
             await dialog.accept(Data);

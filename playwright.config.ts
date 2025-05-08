@@ -14,11 +14,12 @@ export default defineConfig({
   fullyParallel: true,
   retries: 0,
   //workers: "100%",
-  workers:2,
+  workers: 1,
   repeatEach: 0,
 
   //reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./customReporterConfig.ts`], ['line'], ["allure-playwright"]],
-  reporter:[['html', { outputFolder: 'reporter', open: 'never' }]]
+  reporter: [['html', { outputFolder: 'reporter', open: 'never' }]]
+
   ,
   use: {
     actionTimeout: 20000,
@@ -30,7 +31,7 @@ export default defineConfig({
     bypassCSP: true,
     permissions: ['camera'],
 
-    storageState: "logins/salesforceLogin.json"
+    //storageState: "logins/salesforceLogin.json"
 
   },
 

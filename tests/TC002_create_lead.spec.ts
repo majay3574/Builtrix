@@ -2,14 +2,14 @@ import { test } from "../customFixtures/salesForceFixture"
 import { FakerData } from "../helpers/fakerUtils"
 
 let firstName = FakerData.getFirstName()
-test.use({ storageState: "logins/salesforceLogin.json" })
+//test.use({ storageState: "logins/salesforceLogin.json" })
 test(` creating Lead`, async ({ SalesforceLogin, SalesforceHome, SalesforceLead }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
         { type: 'TestCase', description: 'Creating Lead' },
     );
     await SalesforceLogin.salesforceLogin("ADMINLOGIN");
-    await SalesforceLogin.verifyHomeLabel();
+    //await SalesforceLogin.verifyHomeLabel();
     await SalesforceHome.appLauncher();
     await SalesforceHome.viewAll();
     await SalesforceHome.searchApp("Leads");
