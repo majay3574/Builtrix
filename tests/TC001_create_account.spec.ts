@@ -18,26 +18,28 @@ test('Creating an Account Using CSV Data', async ({ SalesforceLogin, SalesforceH
     for (const row of data) {
         const { Rating, Type, Industry, Ownership, BillingStreet, BillingCity, PostalCode, BillingState, BillingCountry } = row;
         const acctName = FakerData.getRandomTitle();
-        updateJSONFile<accountData>("../data/accountdata.json", { TC001: acctName });
-        await SalesforceLogin.salesforceLogin("ADMINLOGIN");
-        //await SalesforceLogin.verifyHomeLabel();
-        await SalesforceHome.appLauncher();
-        await SalesforceHome.viewAll();
-        await SalesforceHome.searchApp("Accounts");
-        await SalesforceHome.app("Accounts");
-        await SalesforceAccount.newButton();
-        await SalesforceAccount.accountName(acctName);
-        await SalesforceAccount.accountNumber(FakerData.getMobileNumber());
-        await SalesforceAccount.ratingDropdown(Rating);
-        await SalesforceAccount.accountType(Type);
-        await SalesforceAccount.industry(Industry);
-        await SalesforceAccount.ownerShip(Ownership);
-        await SalesforceAccount.billingStreet(BillingStreet);
-        await SalesforceAccount.billingCity(BillingCity);
-        await SalesforceAccount.postalCode(PostalCode);
-        await SalesforceAccount.billingState(BillingState);
-        await SalesforceAccount.billingCountry(BillingCountry);
-        await SalesforceAccount.saveButton()
-        await SalesforceAccount.verifiAccountName(acctName)
+        //accountData --> interfaceFile
+        //"../data/accountdata.json"  --> path of json(need to created)
+        updateJSONFile<accountData>("../data/accountdata.json", { TC002: acctName });
+         await SalesforceLogin.salesforceLogin("ADMINLOGIN");
+         //await SalesforceLogin.verifyHomeLabel();
+         await SalesforceHome.appLauncher();
+         await SalesforceHome.viewAll();
+         await SalesforceHome.searchApp("Accounts");
+         await SalesforceHome.app("Accounts");
+         await SalesforceAccount.newButton();
+         await SalesforceAccount.accountName(acctName);
+         await SalesforceAccount.accountNumber(FakerData.getMobileNumber());
+         await SalesforceAccount.ratingDropdown(Rating);
+         await SalesforceAccount.accountType(Type);
+         await SalesforceAccount.industry(Industry);
+         await SalesforceAccount.ownerShip(Ownership);
+         await SalesforceAccount.billingStreet(BillingStreet);
+         await SalesforceAccount.billingCity(BillingCity);
+         await SalesforceAccount.postalCode(PostalCode);
+         await SalesforceAccount.billingState(BillingState);
+         await SalesforceAccount.billingCountry(BillingCountry);
+         await SalesforceAccount.saveButton()
+         await SalesforceAccount.verifiAccountName(acctName)
     }
 });

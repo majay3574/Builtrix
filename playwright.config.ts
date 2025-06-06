@@ -17,10 +17,9 @@ export default defineConfig({
   workers: 1,
   repeatEach: 0,
 
-  //reporter: [['html', { outputFolder: reportDir, open: 'always' }], [`./customReporterConfig.ts`], ['line'], ["allure-playwright"]],
-  reporter: [['html', { outputFolder: 'reporter', open: 'never' }]]
+  reporter: [['html', { outputFolder: "reporter", open: 'always' }], [`./customReporterConfig.ts`], ['line'], ["allure-playwright"]],
+  //reporter: [['html', { outputFolder: 'reporter', open: 'never' }]],
 
-  ,
   use: {
     actionTimeout: 20000,
     trace: 'on',
