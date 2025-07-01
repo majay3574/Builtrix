@@ -19,7 +19,6 @@ try {
   console.error("❌ Error reading CSV data:", error);
 }
 
-// Define test suite
 test.describe("Salesforce Account Creation Tests", () => {
   testData.forEach((row, index) => {
     const testCaseId = `TC${(index + 1).toString().padStart(3, "0")}`;
