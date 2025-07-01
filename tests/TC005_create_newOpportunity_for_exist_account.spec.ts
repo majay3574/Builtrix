@@ -1,5 +1,5 @@
 import { test } from "../customFixtures/salesForceFixture"
-import { JsonReader } from "../helpers/jsonReader";
+import { JsonReader } from "../helpers/dataUtils/jsonReader";
 
 
 
@@ -10,7 +10,7 @@ test(`create_newOpportunity_for_exist_account `, async ({ SalesforceLogin, Sales
         { type: 'TestCase', description: 'Creating Lead' },
     );
 
-    let jsonData = JsonReader.readJson("../data/accountdata.json");
+    let jsonData = JsonReader.readJson("../../data/accountdata.json");
     await SalesforceLogin.salesforceLogin("ADMINLOGIN");
     //await SalesforceLogin.verifyHomeLabel();
     await SalesforceHome.appLauncher();

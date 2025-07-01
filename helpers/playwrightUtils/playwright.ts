@@ -4,15 +4,12 @@ import * as path from 'path';
 import fs from 'fs';
 
 
-
-
 export abstract class PlaywrightWrapper {
 
     page: Page;
     readonly context: BrowserContext;
     private static newPage: Page | null = null;
     protected testInfo?: { title: string };
-
     constructor(page: Page, context: BrowserContext,) {
         this.page = page;
         this.context = context;
@@ -32,8 +29,7 @@ export abstract class PlaywrightWrapper {
    */
     public async loadApp(url: string) {
         try {
-            await this.page.goto(url); // Increased timeout for 60 seconds
-            //console.log(`Successfully loaded the URL: ${url}`);
+            await this.page.goto(url);
         } catch (error) {
             console.log(`Error loading the page at ${url}:`);
             throw new Error(`Failed to load the page at ${url}`);
@@ -47,12 +43,13 @@ export abstract class PlaywrightWrapper {
    * @param {string} name - The name of the textbox element.
    * @param {string} data - The data to be typed into the textbox.
    */
-    protected async type(locator: string, name: string, data: string, description?: string) {
+    protected async type(locator: string, name: string, data: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
             await this.page.waitForSelector(locator, { state: 'visible' });
             await this.page.locator(locator).clear();
             await this.page.locator(locator).fill(data);
         }
+
         )
     }
 
@@ -65,7 +62,6 @@ export abstract class PlaywrightWrapper {
      */
     protected async fillAndEnter(locator: string, name: string, data: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
-
             await this.page.locator(locator).clear();
             await this.page.fill(locator, data, { force: true })
             await this.page.focus(locator)
@@ -112,13 +108,11 @@ export abstract class PlaywrightWrapper {
         await test.step(`The ${name} ${type} clicked`, async () => {
             await this.page.waitForSelector(locator, { state: 'visible' });
             await this.page.locator(locator).click();
-
         });
     }
 
     protected async forceClick(locator: string, name: string, type: string) {
         await test.step(`The ${name} ${type} clicked`, async () => {
-
             await this.page.waitForSelector(locator, { state: 'visible' });
             await this.page.locator(locator).click({ force: true });
         });
@@ -217,6 +211,7 @@ export abstract class PlaywrightWrapper {
      */
     protected async focusWindow(locator: string): Promise<any> {
         const newPage = this.context.waitForEvent('page');
+
         await this.page.locator(locator).click()
         const newWindow = await newPage;
         await newWindow.waitForLoadState('load')
@@ -246,6 +241,11 @@ export abstract class PlaywrightWrapper {
         return null;
     }
 
+    /**
+     * Accepts an alert dialog with an optional data parameter.
+     * 
+     * @param {string} [Data] - Optional data to be passed to the dialog accept method.
+     */
     protected async acceptAlert(Data?: string) {
         this.page.on("dialog", async (dialog) => {
             dialog.message()
@@ -254,6 +254,15 @@ export abstract class PlaywrightWrapper {
         });
     }
 
+    /**
+     * Switches to a specified frame and performs an action on an element within that frame.
+     * 
+     * @param frameLocator locator of the frame
+     * @param locator locator of the element inside the frame
+     * @param name name of the element
+     * @param type type of the element (e.g., Button, Link, etc.)
+     * @param index optional index of the element if there are multiple elements matching the locator
+     */
     protected async clickinFrame(frameLocator: string, locator: string, name: string, type: string, index?: number) {
         await test.step(`The ${type} ${name} clicked`, async () => {
             const frameEle = this.page.frameLocator(frameLocator)
@@ -266,7 +275,13 @@ export abstract class PlaywrightWrapper {
         })
     }
 
-
+    /**
+     * Verifies the presence of an element within a specified frame.
+     * 
+     * @param frameLocator - The locator for the frame.
+     * @param locator - The locator for the element within the frame.
+     * @param name - A descriptive name for the element.
+     */
     protected async verifyEleinFrame(frameLocator: string, locator: string, name: string) {
         await test.step(`Verifying the ${name} is present in the frame`, async () => {
             try {
@@ -289,6 +304,13 @@ export abstract class PlaywrightWrapper {
         });
     }
 
+    /**
+     * Verifies the presence of an element within a specified frame and clicks it if found.
+     * 
+     * @param frameLocator - The locator for the frame.
+     * @param locator - The locator for the element within the frame.
+     * @param name - A descriptive name for the element.
+     */
     protected async verifyAndClickEleinFrame(frameLocator: string, locator: string, name: string) {
         await test.step(`The ${name} is verified`, async () => {
             const frameEle = this.page.frameLocator(frameLocator)
@@ -311,6 +333,14 @@ export abstract class PlaywrightWrapper {
     }
 
 
+    /**
+     * Types data into a textbox within a specified frame, clearing any existing text first.
+     * 
+     * @param flocator - The locator for the frame.
+     * @param locator - The locator for the textbox element within the frame.
+     * @param name - A descriptive name for the textbox element.
+     * @param data - The data to be typed into the textbox.
+     */
     protected async typeinFrame(flocator: string, locator: string, name: string, data: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
             const frameLocator = this.page.frameLocator(flocator);
@@ -327,6 +357,14 @@ export abstract class PlaywrightWrapper {
         });
     }
 
+    /**
+     * Hovers over a specified element and clicks another element.
+     * 
+     * @param hoverLocator - The locator for the element to hover over.
+     * @param clickLocator - The locator for the element to click.
+     * @param Menu - The name of the menu.
+     * @param name - The name of the element being clicked.
+     */
     protected async mouseHoverandClick(hoverLocator: string, clickLocator: string, Menu: string, name: string) {
         await test.step(`The ${Menu} ${name} clicked`, async () => {
             await this.page.hover(hoverLocator);
@@ -335,6 +373,12 @@ export abstract class PlaywrightWrapper {
         })
     }
 
+    /**
+     * Selects an option from a dropdown using value, index, or label.
+     * 
+     * @param selector - The selector for the dropdown element.
+     * @param options - An object containing the selection criteria (value, index, or label).
+     */
     protected async selectDropdown(selector: string, options: { value?: string; index?: number; label?: string }) {
         await test.step(`Selecting from dropdown using ${JSON.stringify(options)}`, async () => {
             const dropdown = await this.page.locator(selector);
@@ -550,15 +594,18 @@ export abstract class PlaywrightWrapper {
         }
     }
 
-    protected switchToChildPage(index: number): void {
+    protected async switchToChildPage(index: number): Promise<void> {
         const pages = this.context.pages();
+        await this.page.waitForLoadState('load');
         if (pages.length > index) {
             this.page = pages[index];
-            this.page.bringToFront();
+            await this.page.bringToFront();
         } else {
             throw new Error('Page at the specified index is not available');
         }
     }
+
+
     getById(locator: string): Locator {
         return this.page.locator(`#${locator}`)
     }
@@ -655,3 +702,5 @@ export abstract class PlaywrightWrapper {
 
 
 }
+
+

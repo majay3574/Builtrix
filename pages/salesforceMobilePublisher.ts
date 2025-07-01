@@ -1,5 +1,6 @@
-import { PlaywrightWrapper } from '../helpers/playwright';
+import { PlaywrightWrapper } from '../helpers/playwrightUtils/playwright';
 import { BrowserContext, Page } from "@playwright/test";
+import { selectors } from "./selectors";
 
 export class SalesforceMobilePublisherPage extends PlaywrightWrapper {
     constructor(page: Page, context: BrowserContext) {
@@ -7,24 +8,26 @@ export class SalesforceMobilePublisherPage extends PlaywrightWrapper {
     }
 
     public async clickConfirmButton(): Promise<any> {
-        this.switchToChildPage(1);
-        await this.click("//button[text()='Confirm']", "Confirm", "Button");
+        if (await this.page.locator(selectors.confirmButton).isVisible()) {
+            await this.switchToChildPage(1);
+            await this.click(selectors.confirmButton, "Confirm", "Button");
+        } else {
+            await this.switchToChildPage(2);
+            await this.click(selectors.confirmButton, "Confirm", "Button");
+        }
     }
 
     public async clickProduct(): Promise<any> {
-        await this.click("span:text-is('Products')", "Product", "Button");
+        await this.click(selectors.service.products, "Product", "Button");
         /*   this.switchToParentPage();
           this.wait('minWait'); */
-
     }
 
     public async clickAgentforce() {
-        await this.click("span:text-is('Agentforce')", "Agentforce", "Link");
+        await this.click(selectors.service.agentForce, "Agentforce", "Link");
     }
 
-    public async hoverPricing() {
-        await this.mouseHover("span:text-is('Pricing')", "Pricing");
-        await this.click("span:text-is('Agentforce Pricing')", "Agent Pricing", "Button");
-
+    public async clickAgentPricing() {
+        await this.click(selectors.service.agentPricing, "Agent Pricing", "Button");
     }
 }

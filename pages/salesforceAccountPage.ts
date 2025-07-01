@@ -1,6 +1,6 @@
 import { Page, BrowserContext, expect } from "@playwright/test";
 import { selectors } from "./selectors";
-import { PlaywrightWrapper } from "../helpers/playwright";
+import { PlaywrightWrapper } from "../helpers/playwrightUtils/playwright";
 
 
 export class SalesforceAccountPage extends PlaywrightWrapper {
@@ -11,6 +11,7 @@ export class SalesforceAccountPage extends PlaywrightWrapper {
     public async newButton() {
         await this.validateElementVisibility(selectors.newBtn, "New Button");
         await this.click(selectors.newBtn, "New", "Button");
+        
     }
 
     public async accountName(value: string) {
@@ -69,12 +70,10 @@ export class SalesforceAccountPage extends PlaywrightWrapper {
         await this.spinnerDisappear()
         await this.validateElementVisibility(selectors.accounts.verificationText, "Account Name")
         const accountName = await this.getInnerText(selectors.accounts.verificationText)
-        console.log(accountName);
         expect(accountName).toContain(value)
 
     }
     
-
     public async searchAccount(accountName: string) {
         await this.interactWithElement('PLACEHOLDER', selectors.accounts.Searchthis, 'fill', accountName);
         await this.keyboardAction(`[placeholder="${selectors.accounts.Searchthis}"]`, 'Enter', "Input", "Search This");

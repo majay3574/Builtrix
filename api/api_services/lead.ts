@@ -1,7 +1,7 @@
 import url from "../../data/apiData/url.json";
 import { createLeaddata, updateLeadData } from '../../data/apiData/rawData';
-import { httpRequest } from "../../helpers/requestUtils";
-import { assertResponse, assertStatus } from "../../helpers/verificationUtils";
+import { httpRequest } from "../../helpers/apiUtils/requestUtils";
+import { assertResponse, assertStatus } from "../../helpers/apiUtils/verificationUtils";
 
 const baseURL = url.leadEndPoint;
 

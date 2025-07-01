@@ -2,17 +2,66 @@
 SonicFramework is a scalable automation framework using Playwright and TypeScript. It supports UI and API automation, custom fixtures, POM architecture, reusable helpers, and environment-based configurations.
 
 ---
+project-root/
+├── api/                          # API request payloads or definitions
+├── constants/                   # Global constants, test data enums, selectors
+├── customFixtures/             # Playwright custom fixtures
+├── data/                        # Static test data like CSV, JSON, Excel
+│
+├── helpers/                     # Utilities divided into logical subfolders
+│   ├── data/                    # Data manipulation utilities
+│   │   ├── csvUtil.ts
+│   │   ├── excelUtils.ts
+│   │   ├── jsonDataHandler.ts
+│   │   └── jsonReader.ts
+│   │
+│   ├── api/                     # API utility methods
+│   │   ├── requestUtils.ts
+│   │   └── verificationUtils.ts
+│   │
+│   ├── browser/                 # Playwright & browser-based utilities
+│   │   ├── playwright.ts
+│   │   └── highlighter.ts
+│   │
+│   ├── db/                      # Database-related helpers
+│   │   └── dbUtil.ts
+│   │
+│   └── generator/               # Fake data generators
+│       └── fakerUtils.ts
+│
+├── logins/                      # Login logic or credential flows
+├── logs/                        # Test logs if any
+├── node_modules/
+├── pages/                       # Page Object Models
+├── playwright-report/           # HTML reports
+├── reporter/                    # Custom reporters or hooks
+├── screenshots/                 # Screenshots on failure
+├── test-results/                # Playwright’s raw test results
+├── tests/                       # Test suites organized by feature/module
+│
+├── .gitignore
+├── customReporterConfig.ts
+├── package.json
+├── package-lock.json
+├── playwright.config.ts
+├── tsconfig.json
+└── README.md
+
+
+
+---
 
 ## 📂 Folder Structure
-- **.github/** – GitHub Actions for CI/CD
-- **api/** – API utilities (e.g., token generation, API requests)
-- **constants/** – Global constants (URLs, credentials)
-- **customFixtures/** – Custom Playwright test fixtures
-- **data/** – JSON-based test data (users, tokens)
-- **helpers/** – Common utility functions (e.g., waiters, HTTP client)
-- **logins/** – Login workflows (page-level & API-based)
-- **pages/** – POM structure for UI tests
-- **tests/** – Actual test specs (e.g., login tests)
+- **.github/**           – GitHub Actions for CI/CD  
+- **api/**               – API utilities (e.g., token generation, API requests)  
+- **constants/**         – Global constants (URLs, credentials)  
+- **customFixtures/**    – Custom Playwright test fixtures  
+- **data/**              – JSON-based test data (users, tokens)  
+- **helpers/**           – Common utility functions (e.g., waiters, HTTP client)  
+- **logins/**            – Login workflows (page-level & API-based)  
+- **pages/**             – POM structure for UI tests  
+- **tests/**             – Actual test specs (e.g., login tests)
+
 
 ---
 

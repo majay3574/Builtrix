@@ -8,11 +8,15 @@ export const selectors = {
     viewAllBtn: `//button[text()="View All"]`,
     appItemSearchField: "one-app-launcher-modal input.slds-input",
     appOrItem: (appName: string) => `//mark[text()='${appName}']`,
+    learnMoreBtn: `//button[text()='Learn More']`,
     saveBtn: `//button[text()='Save']`,
     newBtn: `div:text-is('New')`,
     deleteBtn: "span:text-is('Delete')",
     deletePopUp: `//button/span[text()='Delete']`,
     noItemToDisplay: "//span[text()='No items to display.']",
+    setupGear: `div.setupGear a[role='button']`,
+    setupLink: `#related_setup_app_home a[title='Setup']`,
+    confirmButton: `//button[text()='Confirm']`,
 
     accounts: {
         accountNameInput: `//label[text()='Account Name']//following::input[1]`,
@@ -30,6 +34,7 @@ export const selectors = {
         billingCountryInput: "//label[text()='Billing Country']//following::input[1]",
         verificationText: `//slot//lightning-formatted-text[@slot='primaryField']`,
         closeTab: `a[title$ = 'Account'] + * + button`
+
     },
     leads: {
         salutation: "button[name='salutation']",
@@ -51,4 +56,9 @@ export const selectors = {
         newAccountTag: `span[title='New Account']`,
         newAccountHeader: `h1:text-is('New Account')`,
     },
+    service: {
+        products:`span:text-is('Products')`,
+        agentForce:`span:text-is('Agentforce')`,
+        agentPricing:`span:text-is('Agentforce Pricing')`,
+    }
 };

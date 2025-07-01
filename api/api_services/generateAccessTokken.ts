@@ -2,7 +2,7 @@
 
 import url from "../../data/apiData/url.json";
 import { oauthData } from '../../data/apiData/rawData';
-import { httpRequest } from "../../helpers/requestUtils";
+import { httpRequest } from "../../helpers/apiUtils/requestUtils";
 
 const baseURL = url.bearerTokken;
 

@@ -17,7 +17,11 @@ export default defineConfig({
   workers: 1,
   repeatEach: 0,
 
-  reporter: [['html', { outputFolder: "reporter", open: 'always' }], [`./customReporterConfig.ts`], ['line'], ["allure-playwright"]],
+  reporter: [
+    ['html', { outputFolder: "reporter", open: 'always' }],
+    [`./customReporterConfig.ts`],
+    ['allure-playwright'],
+  ],
   //reporter: [['html', { outputFolder: 'reporter', open: 'never' }]],
 
   use: {
@@ -30,8 +34,7 @@ export default defineConfig({
     bypassCSP: true,
     permissions: ['camera'],
 
-    //storageState: "logins/salesforceLogin.json"
-
+    storageState: "logins/salesforceLogin.json"
   },
 
   // testMatch: [
@@ -40,24 +43,6 @@ export default defineConfig({
   // ],
 
   projects: [
-    /*  {
-       name: 'Chromium',
-       use: {
-         ...devices['Desktop Chromium'],
-         ignoreHTTPSErrors: true,
-         headless: false,
-         video: 'on',
-         screenshot: "on",
-         viewport: null,
-         launchOptions: {
-           slowMo: 300,
-           args: ["--start-maximized", "--disable-web-security", "--disable-features=IsolateOrigins,site-per-process", '--no-proxy-server']
-         },
- 
- 
-       }
- 
-     }, */
     {
       name: 'chrome',
       use: {

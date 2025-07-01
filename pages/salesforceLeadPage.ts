@@ -1,6 +1,6 @@
-import { Page, Locator, BrowserContext } from "@playwright/test";
+import { Page, BrowserContext } from "@playwright/test";
 import { selectors } from "./selectors";
-import { PlaywrightWrapper } from "../helpers/playwright";
+import { PlaywrightWrapper } from "../helpers/playwrightUtils/playwright";
 
 
 export class SalesforceLeadPage extends PlaywrightWrapper {

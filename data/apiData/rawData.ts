@@ -1,5 +1,5 @@
 
-import { FakerData } from '../../helpers/fakerUtils';
+import { FakerData } from '../../helpers/testDataGen/fakerUtils';
 import dotenv from 'dotenv';
 dotenv.config({ path: './data/apiData/oauthData.env' });
 
