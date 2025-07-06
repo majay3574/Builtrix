@@ -19,7 +19,7 @@ try {
   console.error("❌ Error reading CSV data:", error);
 }
 
-test.describe("Salesforce Account Creation Tests", () => {
+test.describe("@smoke Salesforce Account Creation Tests", () => {
   testData.forEach((row, index) => {
     const testCaseId = `TC${(index + 1).toString().padStart(3, "0")}`;
     const testTitle = `Account Creation for Industry: ${row.Industry}`;
@@ -55,6 +55,7 @@ test.describe("Salesforce Account Creation Tests", () => {
         await SalesforceHome.app("Accounts");
       });
       await test.step(" Fill and Create Account", async () => {
+
         await SalesforceAccount.newButton();
         await SalesforceAccount.accountName(acctName);
         await SalesforceAccount.accountNumber(FakerData.getMobileNumber());

@@ -1,9 +1,8 @@
 import { test } from "../customFixtures/salesForceFixture"
 import { FakerData } from "../helpers/testDataGen/fakerUtils"
 
-let firstName = FakerData.getFirstName()
-//test.use({ storageState: "logins/salesforceLogin.json" })
-test(` creating Lead`, async ({ SalesforceLogin, SalesforceHome, SalesforceLead }) => {
+let firstName = FakerData.getFirstName();
+test(`@smoke @Regression creating Lead`, async ({ SalesforceLogin, SalesforceHome, SalesforceLead }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
         { type: 'TestCase', description: 'Creating Lead' },
@@ -20,6 +19,6 @@ test(` creating Lead`, async ({ SalesforceLogin, SalesforceHome, SalesforceLead 
     await SalesforceLead.lastName(FakerData.getLastName());
     await SalesforceLead.Company(FakerData.randomCityName());
     await SalesforceLead.saveButton();
-    await SalesforceLead.verifiTheLeadAccount(firstName)
+    await SalesforceLead.verifyTheLeadAccount(firstName);
 
 })

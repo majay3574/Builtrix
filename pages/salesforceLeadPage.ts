@@ -34,7 +34,7 @@ export class SalesforceLeadPage extends PlaywrightWrapper {
         await this.click(selectors.saveBtn, "Save", "Button")
     }
 
-    public async verifiTheLeadAccount(expectedValue: string) {
+    public async verifyTheLeadAccount(expectedValue: string) {
         await this.validateElementVisibility(selectors.leads.verificationText, "Lead Name")
         const leadName = await this.getInnerText(selectors.leads.verificationText)
         console.log(leadName);

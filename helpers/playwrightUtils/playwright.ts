@@ -523,7 +523,7 @@ export abstract class PlaywrightWrapper {
     }
 
 
-    async spinnerDisappear(): Promise<void> {
+    public async spinnerDisappear(): Promise<void> {
         await this.wait('minWait');
         const spinner = this.page.locator("//div[@class='slds-spinner_container slds-grid']");
         await expect(spinner).toHaveCount(0);

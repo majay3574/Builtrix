@@ -10,7 +10,6 @@ test(` creating Contact`, async ({SalesforceLogin,SalesforceHome, SalesforceLead
     );
 
     await SalesforceLogin.salesforceLogin("ADMINLOGIN");
-    //await SalesforceLogin.verifyHomeLabel();
     await SalesforceHome.appLauncher();
     await SalesforceHome.viewAll();
     await SalesforceHome.searchApp("Leads");
@@ -21,6 +20,6 @@ test(` creating Contact`, async ({SalesforceLogin,SalesforceHome, SalesforceLead
     await SalesforceLead.lastName(FakerData.getLastName());
     await SalesforceLead.Company(FakerData.randomCityName());
     await SalesforceLead.saveButton();
-    await SalesforceLead.verifiTheLeadAccount(firstName)
+    await SalesforceLead.verifyTheLeadAccount(firstName);
 
 })

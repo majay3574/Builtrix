@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const timestamp = Date.now();
-//const reportDir = `./reporter/playwright-reports-${timestamp}`;
+const reportDir = `./reporter/playwright-reports-${timestamp}`;
 export default defineConfig({
   timeout: 55 * 10000, //55_000
 
@@ -18,7 +18,7 @@ export default defineConfig({
   repeatEach: 0,
 
   reporter: [
-    ['html', { outputFolder: "reporter", open: 'always' }],
+    ['html', { outputFolder: reportDir, open: 'always' }],
     [`./customReporterConfig.ts`],
     ['allure-playwright'],
   ],
@@ -59,21 +59,8 @@ export default defineConfig({
       true ? [{
         name: 'API Testing',
         testDir: './api',
-
-        use: {
-          headless: false,
-          ...devices['Desktop Chromium'],
-          viewport: null,
-          launchOptions: {
-            slowMo: 300,
-            args: ["--start-maximized", "--disable-web-security"]
-          }
-
-        }
-      },] : []
+      }] : []
     ),
   ],
-
-
 
 });

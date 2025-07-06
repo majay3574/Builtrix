@@ -14,7 +14,7 @@ export async function generateAccessToken() {
             userData: oauthData,
             contentType: 'x-www-form-urlencoded',
             customHeaders: {
-                    "Connection": "keep-alive",
+                "Connection": "keep-alive",
             }
         });
         const instanceUrl = response.data.instance_url;
@@ -27,5 +27,4 @@ export async function generateAccessToken() {
         throw error;
     }
 }
-
 

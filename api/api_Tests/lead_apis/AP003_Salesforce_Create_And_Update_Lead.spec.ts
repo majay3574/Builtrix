@@ -10,24 +10,24 @@ let createdUser: string;
 test.describe(`Salesforce_Create_And_Update_Lead`, () => {
     test.describe.configure({ mode: 'serial' });
 
-    test.beforeAll(`Generate Access Token`, async () => {
+    test(`Generate Access Token`, async () => {
         [instanceURL, accessToken] = await generateAccessToken();
         console.log("Instance URL:", instanceURL);
         console.log("Access Token:", accessToken);
     });
 
-    test(`➕ Create Lead from Salesforce`, async () => {
+    test(`Create Lead from Salesforce`, async () => {
         [response, createdUser] = await createLead(instanceURL, accessToken);
         console.log("Create Lead Response:", response);
         console.log(`Lead ID ${createdUser} successfully created.`);
     });
 
-    test(`✏️ Update Created Lead from Salesforce`, async () => {
+    test(`Update Created Lead from Salesforce`, async () => {
         const updateResponse = await patchCreatedLead(instanceURL, accessToken, createdUser);
         console.log("Update Lead Response:", updateResponse);
     });
 
-    test(`🔍 Verify Updated Lead`, async () => {
+    test(`Verify Updated Lead`, async () => {
         const verificationResponse = await GetcreatedLead(instanceURL, accessToken, createdUser);
         console.log("Fetched Updated Lead:", verificationResponse);
     });

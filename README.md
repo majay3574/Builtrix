@@ -3,9 +3,9 @@ SonicFramework is a scalable automation framework using Playwright and TypeScrip
 
 ---
 project-root/
-├── api/                          # API request payloads or definitions
+├── api/                         # API request payloads or definitions
 ├── constants/                   # Global constants, test data enums, selectors
-├── customFixtures/             # Playwright custom fixtures
+├── customFixtures/              # Playwright custom fixtures
 ├── data/                        # Static test data like CSV, JSON, Excel
 │
 ├── helpers/                     # Utilities divided into logical subfolders
@@ -150,4 +150,9 @@ Organized into specs using **Playwright's test runner**.
 - Add **environment-specific config loader**.
 - **Dockerize the framework**.
 - Enhance **API framework with schema validations**.
+
+## Schema Validator
+- schema validator
+- zod --> npm install zod
+
 

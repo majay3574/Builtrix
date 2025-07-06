@@ -12,10 +12,9 @@ test(`create_newOpportunity_for_exist_account `, async ({ SalesforceLogin, Sales
 
     let jsonData = JsonReader.readJson("../../data/accountdata.json");
     await SalesforceLogin.salesforceLogin("ADMINLOGIN");
-    //await SalesforceLogin.verifyHomeLabel();
     await SalesforceHome.appLauncher();
     await SalesforceHome.viewAll();
     await SalesforceHome.searchApp("Accounts");
     await SalesforceHome.app("Accounts");
-    await SalesforceAccount.searchAccount(jsonData.TC001)
+    await SalesforceAccount.searchAccount(jsonData.TC001);
 })
