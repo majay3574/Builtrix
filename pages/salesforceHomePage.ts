@@ -14,6 +14,10 @@ export class SalesforceHomePage extends PlaywrightWrapper {
         await this.click(selectors.applauncherIcon, "App Launcher", "Button");
     }
 
+    public async clickRole() {
+        await this.click(selectors.role, "role", "Dummy")
+    }
+
     public async viewAll() {
         await this.waitSelector(selectors.viewAllBtn);
         await this.page.locator(selectors.viewAllBtn).highlight();

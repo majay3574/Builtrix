@@ -1,9 +1,10 @@
-import { test as baseTest } from '@playwright/test'
+import { test as baseTest, TestInfo } from '@playwright/test'
 import { SalesforceHomePage } from "../pages/salesforceHomePage"
 import { SalesforceLeadPage } from '../pages/salesforceLeadPage'
 import { SalesforceAccountPage } from '../pages/salesforceAccountPage'
 import { SalesforceLoginPage } from '../pages/salesforceLogin'
 import { SalesforceMobilePublisherPage } from '../pages/salesforceMobilePublisher'
+import { extractAndAnalyzeWithGroq } from '../helpers/errorHandler/errorHandler'
 
 type salesForceFixture = {
     SalesforceHome: SalesforceHomePage
@@ -44,6 +45,21 @@ export const test = baseTest.extend<salesForceFixture>({
         await use(SalesforceMobilePublisher);
     },
 })
+
+const failedTests: TestInfo[] = [];
+
+test.afterEach(async ({ }, testInfo) => {
+    if (['failed', 'timedOut', 'interrupted'].includes(testInfo.status)) {
+        failedTests.push(testInfo); 
+    }
+});
+
+test.afterAll(async () => {
+    for (const testInfo of failedTests) {
+        await extractAndAnalyzeWithGroq(testInfo);
+    }
+});
+
 
 
 

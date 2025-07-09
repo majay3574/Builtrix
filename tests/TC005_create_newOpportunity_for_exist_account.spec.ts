@@ -4,7 +4,7 @@ import { JsonReader } from "../helpers/dataUtils/jsonReader";
 
 
 //test.use({ storageState: "logins/salesforceLogin.json" })
-test(`create_newOpportunity_for_exist_account `, async ({ SalesforceLogin, SalesforceHome, SalesforceAccount, SalesforceMobilePublisher }) => {
+test(`@Regression create_newOpportunity_for_exist_account `, async ({ SalesforceLogin, SalesforceHome, SalesforceAccount, SalesforceMobilePublisher }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
         { type: 'TestCase', description: 'Creating Lead' },

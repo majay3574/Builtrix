@@ -3,7 +3,7 @@ import { FakerData } from "../helpers/testDataGen/fakerUtils"
 
 let firstName = FakerData.getFirstName()
 //test.use({ storageState: "logins/salesforceLogin.json" })
-test(` creating Contact`, async ({SalesforceLogin,SalesforceHome, SalesforceLead }) => {
+test(`@Regression creating Contact`, async ({SalesforceLogin,SalesforceHome, SalesforceLead }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
         { type: 'TestCase', description: 'Creating Lead' },

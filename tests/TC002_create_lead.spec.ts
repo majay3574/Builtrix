@@ -2,7 +2,7 @@ import { test } from "../customFixtures/salesForceFixture"
 import { FakerData } from "../helpers/testDataGen/fakerUtils"
 
 let firstName = FakerData.getFirstName();
-test(`@smoke @Regression creating Lead`, async ({ SalesforceLogin, SalesforceHome, SalesforceLead }) => {
+test(`@Smoke @Regression creating Lead`, async ({ SalesforceLogin, SalesforceHome, SalesforceLead }) => {
     test.info().annotations.push(
         { type: 'Author', description: 'Ajay Michael' },
         { type: 'TestCase', description: 'Creating Lead' },

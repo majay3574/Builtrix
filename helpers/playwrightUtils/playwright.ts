@@ -430,7 +430,7 @@ export abstract class PlaywrightWrapper {
     protected async verification(locator: string, expectedTextSubstring: string) {
         const element = this.page.locator(locator).nth(0);
         const text = await element.innerText();
-        console.log(text);
+        console.log(`Expected Value :`, text);
         const lowerCaseText = text.toLowerCase();
         const lowerCaseExpected = expectedTextSubstring.toLowerCase();
         expect(lowerCaseText).toContain(lowerCaseExpected);

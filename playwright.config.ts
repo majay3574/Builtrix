@@ -19,13 +19,13 @@ export default defineConfig({
 
   reporter: [
     ['html', { outputFolder: reportDir, open: 'always' }],
-    [`./customReporterConfig.ts`],
+    //[`./customReporterConfig.ts`],
     ['allure-playwright'],
   ],
   //reporter: [['html', { outputFolder: 'reporter', open: 'never' }]],
 
   use: {
-    actionTimeout: 20000,
+    actionTimeout: 8000,
     trace: 'on',
     headless: false,
     screenshot: "on",

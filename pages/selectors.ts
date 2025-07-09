@@ -3,6 +3,7 @@ export const selectors = {
     username: "#username",
     password: "#password",
     loginBtn: "Login",
+    role:`[role='navigation']`,
     applauncherIcon: ".slds-icon-waffle",
     homeLabel: "//h1//span[text()='Home']",
     viewAllBtn: `//button[text()="View All"]`,

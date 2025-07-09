@@ -1,4 +1,4 @@
-import { Reporter, FullConfig, Suite, TestCase, TestResult, TestStep } from "@playwright/test/reporter";
+/* import { Reporter, FullConfig, Suite, TestCase, TestResult, TestStep } from "@playwright/test/reporter";
 import winston from 'winston';
 
 // Custom Winston Logger Setup
@@ -58,3 +58,4 @@ class CustomReporter implements Reporter {
 }
 
 export default CustomReporter;
+ */

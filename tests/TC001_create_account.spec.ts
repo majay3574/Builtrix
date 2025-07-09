@@ -19,7 +19,7 @@ try {
   console.error("❌ Error reading CSV data:", error);
 }
 
-test.describe("@smoke Salesforce Account Creation Tests", () => {
+test.describe("@Regression Salesforce Account Creation Tests", () => {
   testData.forEach((row, index) => {
     const testCaseId = `TC${(index + 1).toString().padStart(3, "0")}`;
     const testTitle = `Account Creation for Industry: ${row.Industry}`;
