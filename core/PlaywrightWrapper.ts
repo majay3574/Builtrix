@@ -10,6 +10,7 @@ export abstract class PlaywrightWrapper {
     readonly context: BrowserContext;
     private static newPage: Page | null = null;
     protected testInfo?: { title: string };
+
     constructor(page: Page, context: BrowserContext,) {
         this.page = page;
         this.context = context;

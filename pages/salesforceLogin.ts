@@ -1,5 +1,5 @@
 import { BrowserContext, Page } from "@playwright/test";
-import { PlaywrightWrapper } from "../helpers/playwrightUtils/playwright";
+import { PlaywrightWrapper } from "../core/PlaywrightWrapper";
 import { credentials } from "../constants/credentialData";
 import { expect } from "playwright/test";
 import { URLConstants } from "../constants/urlConstants";

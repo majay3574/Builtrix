@@ -94,6 +94,21 @@ npm install
 npx playwright test
 ```
 
+### Run Playwright Using Grep
+```bash
+npx playwright test --grep "@smoke"
+```
+
+### you can skip the tests with a certain tag:
+```bash
+npx playwright test --grep-invert "@fast"
+```
+
+###
+```bash
+npx playwright test --grep --% "@smoke^|@regression"
+npx playwright test --grep "(?=.*@fast)(?=.*@slow)"
+```
 ---
 
 ## 🧩 Custom Fixtures

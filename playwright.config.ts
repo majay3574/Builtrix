@@ -13,13 +13,11 @@ export default defineConfig({
 
   fullyParallel: true,
   retries: 0,
-  //workers: "100%",
   workers: 1,
   repeatEach: 0,
 
   reporter: [
     ['html', { outputFolder: reportDir, open: 'always' }],
-    //[`./customReporterConfig.ts`],
     ['allure-playwright'],
   ],
   //reporter: [['html', { outputFolder: 'reporter', open: 'never' }]],

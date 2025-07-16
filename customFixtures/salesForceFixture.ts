@@ -21,11 +21,6 @@ export const test = baseTest.extend<salesForceFixture>({
         await use(salesforceLogin);
     },
 
-    /*  SalesforceHome: async ({ page, context }, use) => {
-         const SalesforceHome = new SalesforceHomePage(page, context);
-         await use(SalesforceHome);
-     }, */
-
     SalesforceHome: async ({ page, context }, use) => {
         const SalesforceHome = new SalesforceHomePage(page, context);
         await use(SalesforceHome);
@@ -50,7 +45,7 @@ const failedTests: TestInfo[] = [];
 
 test.afterEach(async ({ }, testInfo) => {
     if (['failed', 'timedOut', 'interrupted'].includes(testInfo.status)) {
-        failedTests.push(testInfo); 
+        failedTests.push(testInfo);
     }
 });
 
