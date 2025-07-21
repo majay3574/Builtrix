@@ -4,7 +4,7 @@ import { SalesforceLeadPage } from '../pages/salesforceLeadPage'
 import { SalesforceAccountPage } from '../pages/salesforceAccountPage'
 import { SalesforceLoginPage } from '../pages/salesforceLogin'
 import { SalesforceMobilePublisherPage } from '../pages/salesforceMobilePublisher'
-import { extractAndAnalyzeWithGroq } from '../helpers/errorHandler/errorHandler'
+import { extractAndAnalyzeWithGroq } from '../helpers/ai_errorHandler/errorHandler'
 
 type salesForceFixture = {
     SalesforceHome: SalesforceHomePage

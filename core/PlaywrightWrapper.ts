@@ -18,7 +18,7 @@ export abstract class PlaywrightWrapper {
 
     protected getNewPage(): Page {
         if (!PlaywrightWrapper.newPage) {
-            throw new Error('New tab is not initialized. Did you forget to call childTab()?');
+            console.error('New tab is not initialized. Did you forget to call childTab()?');
         }
         return PlaywrightWrapper.newPage;
     }
@@ -32,8 +32,8 @@ export abstract class PlaywrightWrapper {
         try {
             await this.page.goto(url);
         } catch (error) {
-            console.log(`Error loading the page at ${url}:`);
-            throw new Error(`Failed to load the page at ${url}`);
+            console.error(`Failed to navigate to ${url}`, error);
+            throw error;
         }
     }
 
@@ -46,13 +46,17 @@ export abstract class PlaywrightWrapper {
    */
     protected async type(locator: string, name: string, data: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
-            await this.page.waitForSelector(locator, { state: 'visible' });
-            await this.page.locator(locator).clear();
-            await this.page.locator(locator).fill(data);
-        }
-
-        )
+            try {
+                await this.page.waitForSelector(locator, { state: 'visible', timeout: 10000 });
+                await this.page.locator(locator).clear();
+                await this.page.locator(locator).fill(data);
+            } catch (error) {
+                console.error(`Failed to type in textbox '${name}' with locator '${locator}'. Error: ${(error)}`);
+                throw error;
+            }
+        });
     }
+
 
 
     /**
@@ -63,13 +67,19 @@ export abstract class PlaywrightWrapper {
      */
     protected async fillAndEnter(locator: string, name: string, data: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
-            await this.page.locator(locator).clear();
-            await this.page.fill(locator, data, { force: true })
-            await this.page.focus(locator)
-            await this.page.keyboard.press("Enter");
-
+            try {
+                await this.page.waitForSelector(locator, { state: 'visible', timeout: 5000 });
+                await this.page.locator(locator).clear();
+                await this.page.fill(locator, data, { force: true });
+                await this.page.focus(locator);
+                await this.page.keyboard.press("Enter");
+            } catch (error) {
+                console.error(`❌ Error in fillAndEnter for "${name}" [${locator}]: ${(error)}`);
+                throw error;
+            }
         });
     }
+
 
     /**
     * Types the specified data into a textbox using keyboard input, after clearing existing text.
@@ -78,11 +88,18 @@ export abstract class PlaywrightWrapper {
   */
     protected async keyboardType(locator: string, data: string) {
         await test.step(`Textbox filled with data: ${data}`, async () => {
-            await this.page.locator(locator).clear();
-            await this.page.focus(locator);
-            await this.page.keyboard.type(data, { delay: 100 });
+            try {
+                await this.page.waitForSelector(locator, { state: 'visible', timeout: 5000 });
+                await this.page.locator(locator).clear();
+                await this.page.focus(locator);
+                await this.page.keyboard.type(data, { delay: 100 });
+            } catch (error) {
+                console.error(`❌ Error in keyboardType for locator '${locator}' with data '${data}': ${(error)}`);
+                throw error;
+            }
         });
     }
+
 
     /**
     * Types the specified data into a textbox and presses <Enter> after clearing the existing text.
@@ -92,11 +109,19 @@ export abstract class PlaywrightWrapper {
     */
     protected async typeAndEnter(locator: string, name: string, data: string) {
         await test.step(`Textbox ${name} filled with data: ${data}`, async () => {
-            await this.page.locator(locator).clear();
-            await this.page.keyboard.type(data, { delay: 400 });
-            await this.page.keyboard.press("Enter");
+            try {
+                await this.page.waitForSelector(locator, { state: 'visible', timeout: 5000 });
+                await this.page.locator(locator).clear();
+                await this.page.focus(locator);
+                await this.page.keyboard.type(data, { delay: 400 });
+                await this.page.keyboard.press("Enter");
+            } catch (error) {
+                console.error(`Error in typeAndEnter for "${name}" using locator "${locator}" with data "${data}": ${(error)}`);
+                throw error;
+            }
         });
     }
+
 
     /**
      * Clicks on the specified textbox element.
@@ -106,49 +131,95 @@ export abstract class PlaywrightWrapper {
      */
 
     protected async click(locator: string, name: string, type: string, description?: string) {
-        await test.step(`The ${name} ${type} clicked`, async () => {
-            await this.page.waitForSelector(locator, { state: 'visible' });
-            await this.page.locator(locator).click();
+        await test.step(`The ${name} ${type} clicked${description ? ` - ${description}` : ''}`, async () => {
+            try {
+                await this.page.waitForSelector(locator, { state: 'visible', timeout: 5000 });
+                await this.page.locator(locator).click();
+            } catch (error) {
+                console.error(
+                    `Error in click action for "${name}" of type "${type}" with locator "${locator}"${description ? ` - ${description}` : ''}. ` +
+                    `Details: ${(error)}`);
+                throw error;
+            }
         });
     }
 
+    /**
+    * Performs a forceful click on a web element, regardless of visibility or overlap.
+    *
+    * @param locator - The selector of the element to be clicked.
+    * @param name - The name of the element (used in reporting).
+    * @param type - The type of the element (e.g., button, link).
+    */
     protected async forceClick(locator: string, name: string, type: string) {
-        await test.step(`The ${name} ${type} clicked`, async () => {
-            await this.page.waitForSelector(locator, { state: 'visible' });
-            await this.page.locator(locator).click({ force: true });
+        await test.step(`The ${name} ${type} clicked (force)`, async () => {
+            try {
+                await this.page.waitForSelector(locator, { state: 'visible', timeout: 5000 });
+                await this.page.locator(locator).click({ force: true });
+            } catch (error) {
+                console.error(
+                    `Error in forceClick for "${name}" of type "${type}" using locator "${locator}". ` +
+                    `Details: ${(error)}`
+                );
+                throw error;
+            }
         });
     }
 
+    /**
+    * Stores the current browser context's storage state to the specified file path.
+     * @param path - The file system path where the storage state JSON should be saved.
+    */
     async storeState(path: string): Promise<void> {
         try {
             await this.context.storageState({ path });
             console.log(`Storage state saved to: ${path}`);
         } catch (error) {
             console.error(`Failed to save storage state to: ${path}`, error);
+            throw error;
         }
     }
-
-
 
     /**
     * Retrieves the inner text of the specified element.
     * 
     * @param {string} locator - The locator for the element.
     * @returns {Promise<string>} - The inner text of the element.
+    *  @throws Error if the element is not found or retrieval fails.
     */
     protected async getInnerText(locator: string): Promise<string> {
-        return await this.page.locator(locator).innerText();
+        return await test.step(`Get innerText for element: ${locator}`, async () => {
+            try {
+                await this.page.waitForSelector(locator, { state: 'visible', timeout: 5000 });
+                const text = await this.page.locator(locator).innerText();
+                return text;
+            } catch (error) {
+                console.error(`Failed to get innerText for locator '${locator}': ${(error)}`);
+                throw error;
+            }
+        });
     }
 
+
     /**
-    * Retrieves the text content of the specified element.
-    * 
-    * @param {string} locator - The locator for the element.
-    * @returns {Promise<string | null | any>} - The text content of the element, or null if none is found.
-    */
-    protected async getTextContent(locator: string): Promise<string | null | any> {
-        return await this.page.locator(locator).textContent();
+   * Retrieves the text content of the specified element.
+   * 
+   * @param locator - The selector for the element.
+   * @returns The text content of the element, or null if the element exists but has no content.
+   * @throws Error if the element is not found or the retrieval fails.
+   */
+    protected async getTextContent(locator: string): Promise<string> {
+        return await test.step(`Get textContent for element: ${locator}`, async () => {
+            try {
+                await this.page.waitForSelector(locator, { state: 'visible', timeout: 5000 });
+                return await this.page.locator(locator).textContent() ?? "";
+            } catch (error) {
+                console.error(`Failed to get textContent for locator '${locator}': ${(error)}`);
+                throw error;
+            }
+        });
     }
+
 
     /**
     * Retrieves the input value of the specified element (e.g., from an input field).
@@ -157,124 +228,189 @@ export abstract class PlaywrightWrapper {
     * @returns {Promise<string>} - The current value of the input element.
     */
     protected async getText(locator: string): Promise<string> {
-        return await this.page.locator(locator).inputValue();
-    }
-
-    /**
-    * Retrieves the title of the current page after it has fully loaded.
-    * 
-    * @returns {Promise<string>} - The title of the page.
-    */
-    protected async getTitle(): Promise<string> {
-        await this.page.waitForLoadState('load');
-        return await this.page.title();
-    }
-
-    /**
-    * Waits for a specific element to be attached to the DOM.
-    * 
-    * @param {string} locator - The locator for the element to wait for.
-    * @param {string} name - A descriptive name for the element (not used in this function but could be useful for logging).
-    */
-    protected async waitSelector(locator: string, name?: string | "Element") {
-        await test.step(`Waiting for ${name} Visible`, async () => {
-            await this.page.waitForSelector(locator, { timeout: 30000, state: "attached" });
-        })
-    }
-
-    /**
-    * Fetches the value of a specified attribute from an element.
-    * 
-    * @param {string} locator - The locator for the element.
-    * @param {string} attName - The name of the attribute to retrieve.
-    * @returns {Promise<string | null>} - The value of the attribute, or null if the attribute does not exist.
-    */
-    protected async fetchattribute(locator: string, attName: string) {
-        const eleValue = await this.page.$(locator)
-        return eleValue?.evaluate(node => node.getAttribute(attName))
-    }
-
-    /**
-    * Retrieves the number of open browser windows (pages) in the current context.
-    *  
-    * @returns {Promise<number>} - The number of open browser windows.
-    */
-    protected async multipleWindowsCount(): Promise<number> {
-        const windowslength = this.page.context().pages().length;
-        return windowslength;
-    }
-
-    /**
-    * Focuses on a new window that opens after clicking an element and retrieves its title.
-    * 
-     * @param {string} locator - The locator for the element to click that opens the new window.
-     * @returns {Promise<any>} - The title of the newly opened window.
-     */
-    protected async focusWindow(locator: string): Promise<any> {
-        const newPage = this.context.waitForEvent('page');
-
-        await this.page.locator(locator).click()
-        const newWindow = await newPage;
-        await newWindow.waitForLoadState('load')
-        return await newWindow.title();
-    }
-
-    /**
-     * Switches to a new window that opens after clicking an element and brings it to the front.
-     * 
-     * @param {string} windowTitle - The title of the window to switch to.
-     * @param {string} locator - The locator for the element to click that opens the new window.
-     * @returns {Promise<Page | null>} - The new window with the specified title, or null if not found.
-     */
-    protected async switchToWindow(windowTitle: any, locator: string): Promise<Page | null> {
-        const [newPage] = await Promise.all([
-            this.context.waitForEvent('page'),
-            this.page.locator(locator).click()
-        ]);
-        const pages = newPage.context().pages();
-        for (const page of pages) {
-            if (await page.title() === windowTitle) {
-                await page.bringToFront();
-                return page;
+        return await test.step(`Get inputValue for element: ${locator}`, async () => {
+            try {
+                await this.page.waitForSelector(locator, { state: 'visible', timeout: 5000 });
+                return await this.page.locator(locator).inputValue();
+            } catch (error) {
+                console.error(`Failed to get textContent for locator '${locator}': ${(error)}`);
+                throw error;
             }
-        }
-        console.log(`No page found with title: ${windowTitle}`);
-        return null;
+        });
+
     }
 
     /**
-     * Accepts an alert dialog with an optional data parameter.
-     * 
-     * @param {string} [Data] - Optional data to be passed to the dialog accept method.
-     */
-    protected async acceptAlert(Data?: string) {
-        this.page.on("dialog", async (dialog) => {
-            dialog.message()
-            await dialog.accept(Data);
-            console.log('Dialog Message:', dialog.message());
+   * Retrieves the title of the current page after it has fully loaded.
+   * 
+   * @returns The title of the page.
+   * @throws Error if the title retrieval fails.
+   */
+    protected async getTitle(): Promise<string> {
+        return await test.step(`Get page title`, async () => {
+            try {
+                await this.page.waitForLoadState('load', { timeout: 5000 });
+                return await this.page.title();
+            } catch (error) {
+                console.error(`Failed to retrieve page title: ${(error)}`);
+                throw error;
+            }
+        });
+    }
+
+
+    /**
+ * Waits for a specific element to be attached to the DOM.
+ *
+ * @param locator - The selector of the element to wait for.
+ * @param name - Descriptive name for logging/reporting.
+ */
+    protected async waitSelector(locator: string, name: string = "Element"): Promise<void> {
+        await test.step(`Waiting for ${name} to be attached`, async () => {
+            try {
+                await this.page.waitForSelector(locator, { timeout: 30000, state: "attached" });
+            } catch (error) {
+                console.error(`Failed to wait for ${name} [${locator}]: ${(error)}`);
+                throw error;
+            }
         });
     }
 
     /**
-     * Switches to a specified frame and performs an action on an element within that frame.
-     * 
-     * @param frameLocator locator of the frame
-     * @param locator locator of the element inside the frame
-     * @param name name of the element
-     * @param type type of the element (e.g., Button, Link, etc.)
-     * @param index optional index of the element if there are multiple elements matching the locator
+     * Fetches the value of a specified attribute from an element.
+     *
+     * @param locator - The selector of the element.
+     * @param attName - The attribute name to retrieve.
+     * @returns The attribute value, or null if not found.
      */
-    protected async clickinFrame(frameLocator: string, locator: string, name: string, type: string, index?: number) {
-        await test.step(`The ${type} ${name} clicked`, async () => {
-            const frameEle = this.page.frameLocator(frameLocator)
-            const elementCount = await frameEle.locator(locator).count();
-            if (elementCount > 0) {
-                await this.page.frameLocator(frameLocator).locator(locator).nth(index).click({ force: true });
-            } else {
-                await this.page.locator(locator).click();
-            }
-        })
+    protected async fetchAttribute(locator: string, attName: string): Promise<string | null> {
+        try {
+            const ele = await this.page.$(locator);
+            return await ele?.evaluate((node, name) => node.getAttribute(name), attName) ?? null;
+        } catch (error) {
+            console.error(`Failed to fetch attribute '${attName}' from '${locator}': ${(error)}`);
+            throw error;
+        }
     }
+
+    /**
+     * Retrieves the number of open browser windows (pages).
+     *
+     * @returns The number of pages in the current browser context.
+     */
+    protected async multipleWindowsCount(): Promise<number> {
+        try {
+            return this.page.context().pages().length;
+        } catch (error) {
+            console.error(`Failed to get the count of multiple windows: ${(error)}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Clicks an element and returns the title of the newly opened window.
+     *
+     * @param locator - The selector of the element to click.
+     * @returns The title of the new window.
+     */
+    protected async focusWindow(locator: string): Promise<string> {
+        try {
+            const newPagePromise = this.context.waitForEvent('page');
+            await this.page.locator(locator).click();
+            const newPage = await newPagePromise;
+            await newPage.waitForLoadState('load');
+            return await newPage.title();
+        } catch (error) {
+            console.error(`Failed to focus on new window after clicking '${locator}': ${(error)}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Switches to a new window opened by clicking a locator and returns the page if title matches.
+     *
+     * @param windowTitle - The expected title of the new window.
+     * @param locator - The element to click that opens the new window.
+     * @returns The matching page or null if not found.
+     */
+    protected async switchToWindow(windowTitle: string, locator: string): Promise<Page | null> {
+        try {
+            const [newPage] = await Promise.all([
+                this.context.waitForEvent('page'),
+                this.page.locator(locator).click()
+            ]);
+
+            const pages = newPage.context().pages();
+            for (const page of pages) {
+                if ((await page.title()) === windowTitle) {
+                    await page.bringToFront();
+                    return page;
+                }
+            }
+
+            console.warn(`No window found with title: ${windowTitle}`);
+            return null;
+        } catch (error) {
+            console.error(`Failed to switch to window with title '${windowTitle}': ${(error)}`);
+            throw error;
+        }
+    }
+
+    /**
+     * Handles and accepts an alert dialog with optional input.
+     *
+     * @param data - Optional input to pass to the alert dialog.
+     */
+    protected async acceptAlert(data?: string): Promise<void> {
+        try {
+            this.page.on("dialog", async (dialog) => {
+                console.log('Dialog Message:', dialog.message());
+                await dialog.accept(data);
+            });
+        } catch (error) {
+            console.error(`Failed to accept alert: ${(error)}`);
+            throw error;
+        }
+    }
+
+
+    /**
+ * Switches to a specified frame and clicks an element inside it.
+ * If the element is not found inside the frame, it tries to click it in the main page.
+ * 
+ * @param frameLocator - Selector for the iframe.
+ * @param locator - Selector of the element inside the frame.
+ * @param name - Descriptive name of the element for logging.
+ * @param type - Type of the element (e.g., Button, Link).
+ * @param index - Optional index if multiple elements match the locator.
+ */
+    protected async clickinFrame(
+        frameLocator: string,
+        locator: string,
+        name: string,
+        type: string,
+        index: number = 0
+    ): Promise<void> {
+        await test.step(`The ${type} ${name} clicked`, async () => {
+            try {
+                const frameElement = this.page.frameLocator(frameLocator);
+                const elementCount = await frameElement.locator(locator).count();
+
+                if (elementCount > 0) {
+                    await frameElement.locator(locator).nth(index).click({ force: true });
+                } else {
+                    console.warn(`Element not found in frame, attempting in main page: ${locator}`);
+                    await this.page.locator(locator).click({ force: true });
+                }
+            } catch (error) {
+                console.error(
+                    `Failed to click ${type} '${name}' in frame '${frameLocator}' using locator '${locator}': ${(error)}`
+                );
+                throw error;
+            }
+        });
+    }
+
 
     /**
      * Verifies the presence of an element within a specified frame.
@@ -394,7 +530,7 @@ export abstract class PlaywrightWrapper {
                 await dropdown.selectOption({ label: options.label });
                 console.log(`Selected by label: ${options.label}`);
             } else {
-                throw new Error('No valid option provided. Please specify value, index, or label.');
+                console.error('No valid option provided. Please specify value, index, or label.');
             }
         });
     }
@@ -445,6 +581,7 @@ export abstract class PlaywrightWrapper {
             console.log(`Element with XPath "${type}" is hidden as expected.`);
         } catch (error) {
             console.error(`Element with XPath "${type}" is still visible.`);
+            throw error;
         }
     }
 
@@ -460,6 +597,7 @@ export abstract class PlaywrightWrapper {
             }
         } catch (error) {
             console.error(`Error validating visibility of ${elementName}: ${error}`);
+            throw error;
         }
     }
 
@@ -516,7 +654,7 @@ export abstract class PlaywrightWrapper {
                     break;
                 default:
                     console.log("Invalid wait type provided.");
-                    throw new Error(`Invalid wait type: ${waitType}`);
+                    console.error(`Invalid wait type: ${waitType}`);
             }
         } catch (error) {
             console.error("Error during wait:", error);
@@ -537,7 +675,7 @@ export abstract class PlaywrightWrapper {
             if (resolvedData !== null) {
                 await this.page.locator(locator).fill(resolvedData);
             } else {
-                throw new Error(`Cannot fill textbox ${name} with null data`);
+                console.error(`Cannot fill textbox ${name} with null data`);
             }
         });
     }
@@ -591,7 +729,7 @@ export abstract class PlaywrightWrapper {
             this.page = pages[0];
             this.page.bringToFront();
         } else {
-            throw new Error('Parent page is not available');
+            console.error('Parent page is not available');
         }
     }
 
@@ -602,15 +740,15 @@ export abstract class PlaywrightWrapper {
             this.page = pages[index];
             await this.page.bringToFront();
         } else {
-            throw new Error('Page at the specified index is not available');
+            console.error('Page at the specified index is not available');
         }
     }
 
 
-    getById(locator: string): Locator {
+    protected getById(locator: string): Locator {
         return this.page.locator(`#${locator}`)
     }
-    getByClass(locator: string): Locator {
+    protected getByClass(locator: string): Locator {
         return this.page.locator(`[class='${locator}']`)
     }
 
@@ -630,11 +768,11 @@ export abstract class PlaywrightWrapper {
         data: string = ""
     ): Promise<void> {
         if (!locator) {
-            throw new Error("Locator must be provided.");
+            console.error("Locator must be provided.");
         }
 
         if (action === "fill" && !data) {
-            throw new Error("Data must be provided for the 'fill' action.");
+            console.error("Data must be provided for the 'fill' action.");
         }
 
         switch (attribute) {
@@ -658,7 +796,7 @@ export abstract class PlaywrightWrapper {
                 if (action === "click") {
                     await this.page.getByText(locator).click();
                 } else {
-                    throw new Error("The 'fill' action is not supported for 'TEXT' attributes.");
+                    console.error("The 'fill' action is not supported for 'TEXT' attributes.");
                 }
                 break;
 
@@ -666,7 +804,7 @@ export abstract class PlaywrightWrapper {
                 if (action === "click") {
                     await this.page.getByTitle(locator).click();
                 } else {
-                    throw new Error("The 'fill' action is not supported for 'TITLE' attributes.");
+                    console.error("The 'fill' action is not supported for 'TITLE' attributes.");
                 }
                 break;
 
@@ -674,7 +812,7 @@ export abstract class PlaywrightWrapper {
                 if (action === "click") {
                     await this.page.getByAltText(locator).click();
                 } else {
-                    throw new Error("The 'fill' action is not supported for 'ALTTEXT' attributes.");
+                    console.error("The 'fill' action is not supported for 'ALTTEXT' attributes.");
                 }
                 break;
 
@@ -697,7 +835,7 @@ export abstract class PlaywrightWrapper {
                 break;
 
             default:
-                throw new Error(`Unsupported attribute: ${attribute}`);
+                console.error(`Unsupported attribute: ${attribute}`);
         }
     }
 

@@ -30,6 +30,7 @@ export default class DB {
         queueLimit: 0
     };
 
+   
 /*executeQuery(query: string): Asynchronous function that takes a SQL query string as input.
 
 mysql.createConnection(this.DBConfig): Establishes a connection to the database.
@@ -59,7 +60,7 @@ connection.end() closes the connection, and errors are caught and logged. */
 }
 
 /* Error Handling
-
+executeQuery(`SELECT * FROM `)
 If the query execution fails, an error is logged and rethrown.
 
 If closing the database connection fails, an error is logged but does not affect execution. */

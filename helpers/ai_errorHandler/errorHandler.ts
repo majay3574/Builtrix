@@ -1,10 +1,14 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
-import key from "../../data/groq.json"
 import { TestInfo } from '@playwright/test';
+import * as dotenv from 'dotenv';
+dotenv.config({ debug: true });
 
-// Groq API Configuration
-const apiKey = key.apiKey;
+const apiKey = process.env.GROQKEY;
+
+if (!apiKey) {
+    throw new Error("Missing GROQKEY in environment variables");
+}
 const model = 'llama-3.3-70b-versatile';
 
 export async function extractAndAnalyzeWithGroq(testInfo: TestInfo) {
@@ -40,8 +44,8 @@ export async function extractAndAnalyzeWithGroq(testInfo: TestInfo) {
     const errorLine = fileLines[lineNum - 1];
 
     const codeFrame = `
-${lineNum - 2} | ${fileLines[lineNum - 3] || ''}
-${lineNum - 1} | ${fileLines[lineNum - 2] || ''}
+    ${lineNum - 2} | ${fileLines[lineNum - 3] || ''}
+    ${lineNum - 1} | ${fileLines[lineNum - 2] || ''}
 ${lineNum} | ${errorLine}
 ${' '.repeat(colNum + lineNum.toString().length + 3)}^
 ${lineNum + 1} | ${fileLines[lineNum] || ''}
