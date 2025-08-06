@@ -1,7 +1,7 @@
 # 🚀 SonicFramework - Playwright Automation Framework
 SonicFramework is a scalable automation framework using Playwright and TypeScript. It supports UI and API automation, custom fixtures, POM architecture, reusable helpers, and environment-based configurations.
 
----
+```bash
 project-root/
 ├── api/                         # API request payloads or definitions
 ├── constants/                   # Global constants, test data enums, selectors
