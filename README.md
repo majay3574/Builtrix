@@ -21,7 +21,6 @@ project-root/
 │   │
 │   ├── browser/                 # Playwright & browser-based utilities
 │   │   ├── playwright.ts
-│   │   └── highlighter.ts
 │   │
 │   ├── db/                      # Database-related helpers
 │   │   └── dbUtil.ts
