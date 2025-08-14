@@ -21,7 +21,7 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run TestCase
       run: |
-         xvfb-run npx playwright test
+         xvfb-run npx playwright test --browser=chromium --channel=chrome --workers=1 --headed --slow-mo=200
     - uses: actions/upload-artifact@v4
       if: always()
       with:
