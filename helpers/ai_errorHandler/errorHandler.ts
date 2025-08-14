@@ -9,8 +9,17 @@ const apiKey = process.env.GROQKEY;
 if (!apiKey) {
     throw new Error("Missing GROQKEY in environment variables");
 }
-const model = 'llama-3.3-70b-versatile';
 
+// Multiple models – one for images + text, others for text only
+const models = [
+    { name: "meta-llama/llama-4-maverick-17b-128e-instruct", supportsImages: true },
+    { name: "llama-3.3-70b-versatile", supportsImages: false }
+    // Add more models here if needed
+];
+
+/**
+ * Main entry – extracts error info and sends to AI
+ */
 export async function extractAndAnalyzeWithGroq(testInfo: TestInfo) {
     if (!testInfo?.error?.stack) {
         console.log('✅ No stack trace available.');
@@ -52,6 +61,18 @@ ${lineNum + 1} | ${fileLines[lineNum] || ''}
 ${lineNum + 2} | ${fileLines[lineNum + 1] || ''}
 `.trim();
 
+    // Try to get screenshot path if exists in Playwright attachments
+    let screenshotBase64 = null;
+    const screenshotAttachment = testInfo.attachments.find(att => att.name === 'screenshot' || att.contentType?.includes('image'));
+    if (screenshotAttachment && screenshotAttachment.path) {
+        try {
+            const imageBuffer = fs.readFileSync(screenshotAttachment.path);
+            screenshotBase64 = `data:image/png;base64,${imageBuffer.toString('base64')}`;
+        } catch (e) {
+            console.warn('⚠️ Could not read screenshot:', e.message);
+        }
+    }
+
     const errorInfo = {
         filePath,
         lineNum,
@@ -59,20 +80,25 @@ ${lineNum + 2} | ${fileLines[lineNum + 1] || ''}
         errorLine,
         codeFrame,
         errorMessage: testInfo.error.message,
-        testTitle: testInfo.title
+        testTitle: testInfo.title,
+        screenshotBase64
     };
 
-    await analyzeWithGroq(errorInfo);
+    await analyzeWithGroqMulti(errorInfo);
 }
 
-async function analyzeWithGroq({
+/**
+ * Runs AI analysis across all configured models
+ */
+async function analyzeWithGroqMulti({
     filePath,
     lineNum,
     colNum,
     errorLine,
     codeFrame,
     errorMessage,
-    testTitle
+    testTitle,
+    screenshotBase64
 }: {
     filePath: string;
     lineNum: number;
@@ -81,8 +107,9 @@ async function analyzeWithGroq({
     codeFrame: string;
     errorMessage: string;
     testTitle: string;
+    screenshotBase64?: string | null;
 }) {
-    const prompt = `
+    const textPrompt = `
 🔧 Error Message:
 ${errorMessage}
 
@@ -93,70 +120,92 @@ ${errorLine}
 ${codeFrame}
 `.trim();
 
-    try {
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${apiKey}`
-            },
-            body: JSON.stringify({
-                model,
-                messages: [
-                    {
-                        role: "system",
-                        content: `
+    const systemPrompt = `
 You are acting as a Senior SDET with deep experience in Playwright + TypeScript automation frameworks.
 You will be given a test failure log, including:
-*'Error message'
-*'Code line'
-*'Code frame or stack trace'
+* 'Error message'
+* 'Code line'
+* 'Code frame or stack trace'
+* (Optional) A screenshot of the UI at the moment of failure
+
 Your job is to:
 Diagnose the failure precisely – point out the actual cause in the context of Playwright/TypeScript.
 Provide the exact fix, ensuring it aligns with Playwright best practices and the existing TypeScript-based framework.
 Include code changes if necessary – formatted in a readable and complete way.
 Keep your explanation minimal, direct, and developer-friendly, like a senior engineer reviewing code.
-Always assume:
-The fix will be implemented by another SDET, so clarity and correctness are key.
-returnFormat:
+Return format:
 🔍 Root Cause:
 [Clearly explain the issue]
 🛠️ Fix:
 [Provide corrected code or steps]
 💡 Note (Optional):
 [Optional tip or caution related to the fix]
-                        `.trim()
-                    },
-                    {
-                        role: "user",
-                        content: prompt
-                    }
-                ],
-                temperature: 0.3,
-                max_tokens: 3000
-            })
-        });
+`.trim();
 
-        const data: {
-            choices?: { message?: { content?: string } }[];
-        } = await response.json();
+    for (const { name: model, supportsImages } of models) {
+        const messages: any[] = [
+            { role: "system", content: systemPrompt }
+        ];
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        if (supportsImages && screenshotBase64) {
+            messages.push({
+                role: "user",
+                content: [
+                    { type: "text", text: textPrompt },
+                    { type: "image_url", image_url: { url: screenshotBase64 } }
+                ]
+            });
+        } else {
+            messages.push({ role: "user", content: textPrompt });
         }
 
-        const content = data.choices?.[0]?.message?.content;
+        console.log(`\n==============================`);
+        console.log(`🚀 Analyzing with model: ${model}`);
+        console.log(`==============================`);
 
-        if (!content) {
-            throw new Error("⚠️ Invalid response format from Groq API");
+        try {
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model,
+                    messages,
+                    temperature: 0.3,
+                    max_tokens: 3000
+                })
+            });
+
+            const data = await response.json() as {
+                choices?: Array<{
+                    message?: {
+                        content?: string;
+                    };
+                }>;
+            };
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const content = data.choices?.[0]?.message?.content;
+            if (!content) {
+                throw new Error("⚠️ Invalid response format from Groq API");
+            }
+
+            console.error(`❌ Test Failed: ${testTitle}`);
+            console.error(`📄 File: ${filePath}`);
+            console.error(`🧨 Message: ${errorMessage}`);
+            console.error(`🔍 Code Frame:\n${codeFrame}`);
+            if (supportsImages && screenshotBase64) {
+                console.log("🖼️ Screenshot included in analysis.");
+            }
+            console.log(`✅ AI Suggestion from ${model}:\n\n${content}`);
+
+        } catch (err: any) {
+            console.error(`❌ Error from ${model}:`, err.message);
         }
-
-        console.error(`❌ Test Failed: ${testTitle}`);
-        console.error(`📄 File: ${filePath}`);
-        console.error(`🧨 Message: ${errorMessage}`);
-        console.error(`🔍 Code Frame:\n${codeFrame}`);
-        console.log(`✅ AI Suggestion:\n\n${content}`);
-    } catch (err: any) {
-        console.error('❌ Groq AI Error:', err.message);
     }
 }

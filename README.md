@@ -1,5 +1,5 @@
-# 🚀 SonicFramework - Playwright Automation Framework
-SonicFramework is a scalable automation framework using Playwright and TypeScript. It supports UI and API automation, custom fixtures, POM architecture, reusable helpers, and environment-based configurations.
+# 🚀 BUILTRIX - Playwright Automation Framework
+BUILTRIX is a scalable automation framework using Playwright and TypeScript. It supports UI and API automation, custom fixtures, POM architecture, reusable helpers, and environment-based configurations.
 
 ```bash
 project-root/
@@ -79,8 +79,8 @@ project-root/
 ## ⚙️ Setup Instructions
 ### Clone the repository
 ```bash
-git clone https://github.com/majay3574/SonicFramework.git
-cd SonicFramework
+git clone https://github.com/majay3574/Builtrix.git
+cd BUILTRIX
 ```
 
 ### Install dependencies
@@ -168,5 +168,4 @@ Organized into specs using **Playwright's test runner**.
 ## Schema Validator
 - schema validator
 - zod --> npm install zod
-
 

@@ -1,11 +1,7 @@
-import { PlaywrightWrapper } from '../core/PlaywrightWrapper';
-import { BrowserContext, Page } from "@playwright/test";
 import { selectors } from "./selectors";
+import { PageCore } from '../core/pagecore';
 
-export class SalesforceMobilePublisherPage extends PlaywrightWrapper {
-    constructor(page: Page, context: BrowserContext) {
-        super(page, context);
-    }
+export class SalesforceMobilePublisherPage extends PageCore {
 
     public async clickConfirmButton(): Promise<any> {
         if (await this.page.locator(selectors.confirmButton).isVisible()) {

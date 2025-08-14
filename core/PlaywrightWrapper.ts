@@ -4,7 +4,7 @@ import * as path from 'path';
 import fs from 'fs';
 
 
-export abstract class PlaywrightWrapper {
+export  class PlaywrightWrapper {
 
     page: Page;
     readonly context: BrowserContext;
