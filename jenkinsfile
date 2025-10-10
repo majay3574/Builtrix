@@ -69,12 +69,7 @@ pipeline {
             steps {
                 script {
                     echo 'Zipping Playwright report...'
-                    bat '''
-                        powershell Compress-Archive `
-                        -Path playwright-report/* `
-                        -DestinationPath playwright-report.zip `
-                        -Force
-                    '''
+                    bat 'powershell -Command "Compress-Archive -Path \'playwright-report\\*\' -DestinationPath \'playwright-report.zip\' -Force"'
                 }
             }
         }
