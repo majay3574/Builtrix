@@ -45,7 +45,7 @@ export default defineConfig({
       name: "chrome",
       use: {
         browserName: "chromium",
-        channel: "msedge",
+        channel: "chrome",
         headless: true,
         viewport: null,
         launchOptions: {
