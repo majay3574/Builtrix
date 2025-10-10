@@ -28,7 +28,7 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 script {
-                    echo "Installing npm dependencies..."
+                    echo 'Installing npm dependencies...'
                     bat 'npm ci'
                 }
             }
@@ -37,7 +37,7 @@ pipeline {
         stage('Install Playwright browsers') {
             steps {
                 script {
-                    echo "Installing Playwright browsers..."
+                    echo 'Installing Playwright browsers...'
                     bat 'npx playwright install --with-deps'
                 }
             }
@@ -46,7 +46,7 @@ pipeline {
         stage('Run Playwright tests') {
             steps {
                 script {
-                    echo "Running Playwright tests..."
+                    echo 'Running Playwright tests...'
                     bat 'npx playwright test --reporter=html'
                 }
             }
@@ -55,8 +55,35 @@ pipeline {
         stage('Publish Report') {
             steps {
                 script {
-                    echo "Archiving Playwright HTML report..."
+                    echo 'Archiving Playwright HTML report...'
                     archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true
+                }
+            }
+        }
+
+        stage('Zip Report') {
+            steps {
+                script {
+                    echo 'Zipping Playwright report...'
+                    bat 'powershell Compress-Archive -Path playwright-report/* -DestinationPath playwright-report.zip -Force'
+                }
+            }
+        }
+
+        stage('Send Email') {
+            steps {
+                script {
+                    echo 'Sending Playwright report via email...'
+                    emailext(
+                        subject: 'Playwright Test Report',
+                        body: '''Hi,
+                        Please find the attached Playwright test report.
+
+                        Regards,
+                        Jenkins''',
+                        to: 'majay357@gmail.com',
+                        attachmentsPattern: 'playwright-report.zip'
+                    )
                 }
             }
         }
@@ -64,13 +91,13 @@ pipeline {
 
     post {
         always {
-            echo "Pipeline execution completed."
+            echo 'Pipeline execution completed.'
         }
         failure {
-            echo "❌ Pipeline failed! Check logs for errors."
+            echo '❌ Pipeline failed! Check logs for errors.'
         }
         success {
-            echo "✅ All tests passed successfully!"
+            echo '✅ All tests passed successfully!'
         }
     }
 }
