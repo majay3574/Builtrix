@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running Playwright tests...'
-                    bat 'npx playwright test TC001_createAccount.spec.ts'
+                    bat 'npx playwright test TC001_create_account.spec.ts'
                 }
             }
         }
