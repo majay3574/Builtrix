@@ -52,9 +52,9 @@ export default defineConfig({
           //slowMo: 300,
           args: [
             "--start-maximized",
-            "--disable-web-security",
+            /* "--disable-web-security",
             "--disable-features=IsolateOrigins,site-per-process",
-            "--no-proxy-server",
+            "--no-proxy-server", */
           ],
         },
       },
