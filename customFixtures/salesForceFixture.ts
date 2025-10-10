@@ -41,7 +41,7 @@ export const test = baseTest.extend<salesForceFixture>({
     },
 })
 
-const failedTests: TestInfo[] = [];
+/* const failedTests: TestInfo[] = [];
 
 test.afterEach(async ({ }, testInfo) => {
     if (['failed', 'timedOut', 'interrupted'].includes(testInfo.status)) {
@@ -53,7 +53,7 @@ test.afterAll(async () => {
     for (const testInfo of failedTests) {
         await extractAndAnalyzeWithGroq(testInfo);
     }
-});
+}); */
 
 
 
