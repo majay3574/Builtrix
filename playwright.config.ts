@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 const timestamp = Date.now();
 const reportDir = `./reporter/playwright-reports-${timestamp}`;
@@ -6,10 +6,9 @@ export default defineConfig({
   timeout: 55 * 10000, //55_000
 
   expect: {
-    timeout: 20000
-  }
-  ,
-  testDir: './tests',
+    timeout: 20000,
+  },
+  testDir: "./tests",
 
   fullyParallel: true,
   retries: 0,
@@ -17,22 +16,23 @@ export default defineConfig({
   repeatEach: 0,
 
   reporter: [
-    ['html', { outputFolder: reportDir, open: 'always' }],
-    ['allure-playwright'],
+    ["html", { open: "always" }],
+    // ["html", { outputFolder: reportDir, open: "always" }],
+    ["allure-playwright"],
   ],
-  //reporter: [['html', { outputFolder: 'reporter', open: 'never' }]],
+
 
   use: {
     actionTimeout: 8000,
-    trace: 'on',
+    trace: "on",
     headless: false,
     screenshot: "on",
-    video: 'on',
+    video: "on",
     ignoreHTTPSErrors: true,
     bypassCSP: true,
-    permissions: ['camera'],
+    permissions: ["camera"],
 
-    storageState: "logins/salesforceLogin.json"
+    storageState: "logins/salesforceLogin.json",
   },
 
   // testMatch: [
@@ -42,23 +42,30 @@ export default defineConfig({
 
   projects: [
     {
-      name: 'chrome',
+      name: "chrome",
       use: {
-        browserName: 'chromium', channel: 'msedge', headless: false,
+        browserName: "chromium",
+        channel: "msedge",
+        headless: false,
         viewport: null,
         launchOptions: {
           //slowMo: 300,
-          args: ["--start-maximized", "--disable-web-security", "--disable-features=IsolateOrigins,site-per-process", '--no-proxy-server']
-
-        }
-
-      }
-    }, ...(
-      false ? [{
-        name: 'API Testing',
-        testDir: './api',
-      }] : []
-    ),
+          args: [
+            "--start-maximized",
+            "--disable-web-security",
+            "--disable-features=IsolateOrigins,site-per-process",
+            "--no-proxy-server",
+          ],
+        },
+      },
+    },
+    ...(false
+      ? [
+          {
+            name: "API Testing",
+            testDir: "./api",
+          },
+        ]
+      : []),
   ],
-
 });
