@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     echo 'Running Playwright tests...'
-                    def result = bat(script: 'npx playwright test TC001_create_account.spec.ts', returnStatus: true)
+                    def result = bat(script: 'npx playwright test', returnStatus: true)
                     if (result != 0) {
                         currentBuild.result = 'UNSTABLE'
                         echo 'Some tests failed, but continuing pipeline...'
