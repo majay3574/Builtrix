@@ -79,15 +79,12 @@ pipeline {
                 script {
                     echo 'Sending Playwright report via email...'
                     emailext(
-                        subject: 'Playwright Test Report',
-                        body: '''Hi,
-                        Please find the attached Playwright test report.
-
-                        Regards,
-                        Jenkins''',
-                        to: 'nishanishaahsin96@gmail.com',
-                        attachmentsPattern: 'playwright-report.zip'
-                    )
+    subject: 'Playwright Report',
+    body: 'Test email',
+    to: 'nishanishaahsin96@gmail.com',
+    attachmentsPattern: 'playwright-report.zip',
+    debug: true
+)
                 }
             }
         }
