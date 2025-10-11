@@ -19,6 +19,7 @@ export class SalesforceHomePage extends PageCore {
     await this.waitSelector(selectors.viewAllBtn);
     await this.page.locator(selectors.viewAllBtn).highlight();
     await this.click(selectors.viewAllBtn, "View All", "Button");
+    await this.wait('mediumWait');
   }
 
   public async searchApp(value: string) {
