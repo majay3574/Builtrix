@@ -9,13 +9,13 @@ const teamUser2: any = data.teamUser2 */
 
 export let credentials = {
 
-    ADMINLOGIN: {
+    ADMINLOGIN1: {
         username: "udayaprasath.karnan630@agentforce.com",
         password: "Sales@4321"
     },
-    ADMINLOGIN1: {
+    ADMINLOGIN: {
         username: "majay3574@gmail.com",
-        password: "Ajaymichael@123"
+        password: "Ajaymichael@008"
     },
     USERLOGIN: {
         username: "Ranjini",
