@@ -82,7 +82,7 @@ pipeline {
     subject: 'Playwright Report',
     body: 'Test email',
     to: 'nishanishaahsin96@gmail.com',
-    attachmentsPattern: 'playwright-report.zip',
+    attachmentsPattern: 'test-results.txt',
     debug: true
 )
                 }

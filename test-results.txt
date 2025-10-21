@@ -1,0 +1,8 @@
+ › chrome › TC001_create_account.spec.ts › @Regression Salesforce Account Creation Tests:
+  › Account Creation for Industry: Banking : failed
+  › Account Creation for Industry: Engineering : failed
+
+Summary:
+Passed: 0
+Failed: 2
+Skipped: 0

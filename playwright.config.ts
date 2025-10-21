@@ -19,8 +19,8 @@ export default defineConfig({
     ["html", { open: "always" }],
     // ["html", { outputFolder: reportDir, open: "always" }],
     ["allure-playwright"],
+    ["./my-reporter.ts"],
   ],
-
 
   use: {
     actionTimeout: 8000,
@@ -50,12 +50,7 @@ export default defineConfig({
         viewport: null,
         launchOptions: {
           //slowMo: 300,
-          args: [
-            "--start-maximized",
-            /* "--disable-web-security",
-            "--disable-features=IsolateOrigins,site-per-process",
-            "--no-proxy-server", */
-          ],
+          args: ["--start-maximized"],
         },
       },
     },
