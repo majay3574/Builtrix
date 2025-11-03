@@ -1,8 +1,9 @@
- › chrome › TC001_create_account.spec.ts › @Regression Salesforce Account Creation Tests:
-  › Account Creation for Industry: Banking : failed
-  › Account Creation for Industry: Engineering : failed
+ › chrome › TC004_leaftaps_dd.spec.ts › Data Driven Tests - LeafTaps Application:
+  › Create Lead - TC001: Create Lead with all valid data : failed
+  › Create Lead - TC002: Create Lead with minimum required fields : failed
+  › Create Lead - TC003: Create Lead with different source and campaign : failed
 
 Summary:
 Passed: 0
-Failed: 2
+Failed: 3
 Skipped: 0
