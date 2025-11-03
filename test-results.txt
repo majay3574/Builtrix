@@ -1,9 +1,9 @@
  › chrome › TC004_leaftaps_dd.spec.ts › Data Driven Tests - LeafTaps Application:
-  › Create Lead - TC001: Create Lead with all valid data : failed
-  › Create Lead - TC002: Create Lead with minimum required fields : failed
-  › Create Lead - TC003: Create Lead with different source and campaign : failed
+  › Create Lead - TC001: Create Lead with all valid data : passed
+  › Create Lead - TC002: Create Lead with minimum required fields : passed
+  › Create Lead - TC003: Create Lead with different source and campaign : passed
 
 Summary:
-Passed: 0
-Failed: 3
+Passed: 3
+Failed: 0
 Skipped: 0

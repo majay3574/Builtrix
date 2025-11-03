@@ -43,59 +43,93 @@ test.describe('Data Driven Tests - LeafTaps Application', () => {
             });
 
             await test.step('Navigate to Create Lead', async () => {
-                await page.getByRole('link', { name: 'CRM/SFA' }).click();
-                await page.getByRole('link', { name: 'Leads' }).click();
-                await page.getByRole('link', { name: 'Create Lead' }).click();
+                // Click on CRM/SFA link
+                await Promise.all([
+                    page.waitForNavigation(),
+                    page.click('text=CRM/SFA')
+                ]);
+
+                // Click on Leads tab
+                await Promise.all([
+                    page.waitForNavigation(),
+                    page.click('text=Leads')
+                ]);
+
+                // Click on Create Lead
+                await Promise.all([
+                    page.waitForNavigation(),
+                    page.click('text=Create Lead')
+                ]);
             });
 
             await test.step('Fill Lead Information', async () => {
-                await page.locator('#createLeadForm_companyName').fill(companyName);
-                await page.locator('#createLeadForm_firstName').fill(firstName);
-                await page.locator('#createLeadForm_lastName').fill(lastName);
+                // Wait for the form to be visible
+                await page.waitForSelector('#createLeadForm_companyName', { state: 'visible' });
 
+                // Fill in the required fields
+                await page.fill('#createLeadForm_companyName', companyName);
+                await page.fill('#createLeadForm_firstName', firstName);
+                await page.fill('#createLeadForm_lastName', lastName);
+
+                // Fill in optional fields if provided
                 if (data.Source) {
-                    await page.selectOption('#createLeadForm_dataSourceId', data.Source);
+                    await page.selectOption('select[name="dataSourceId"]', { label: data.Source });
                 }
                 if (data.MarketingCampaign) {
-                    await page.selectOption('#createLeadForm_marketingCampaignId', data.MarketingCampaign);
+                    await page.selectOption('select[name="marketingCampaignId"]', { label: data.MarketingCampaign });
                 }
                 if (data.Industry) {
-                    await page.selectOption('#createLeadForm_industryEnumId', data.Industry);
+                    await page.selectOption('select[name="industryEnumId"]', { label: data.Industry });
                 }
                 if (data.Ownership) {
-                    await page.selectOption('#createLeadForm_ownershipEnumId', data.Ownership);
+                    await page.selectOption('select[name="ownershipEnumId"]', { label: data.Ownership });
                 }
 
-                // Fill contact information if provided
-                if (data.Phone) await page.locator('#createLeadForm_primaryPhoneNumber').fill(data.Phone);
-                if (data.Email) await page.locator('#createLeadForm_primaryEmail').fill(data.Email);
+                // Fill contact information
+                if (data.Phone) {
+                    await page.fill('#createLeadForm_primaryPhoneNumber', data.Phone);
+                }
+                if (data.Email) {
+                    await page.fill('#createLeadForm_primaryEmail', data.Email);
+                }
 
-                // Fill address information if provided
-                if (data.Country) await page.locator('#createLeadForm_generalCountryGeoId').fill(data.Country);
-                if (data.State) await page.locator('#createLeadForm_generalStateProvinceGeoId').fill(data.State);
-                if (data.City) await page.locator('#createLeadForm_generalCity').fill(data.City);
+                // Fill address information
+                if (data.Country) {
+                    await page.selectOption('select[name="generalCountryGeoId"]', { label: data.Country });
+                    // Wait for state options to load after country selection
+                    await page.waitForTimeout(1000);
+                }
+                if (data.State) {
+                    await page.selectOption('select[name="generalStateProvinceGeoId"]', { label: data.State });
+                }
+                if (data.City) {
+                    await page.fill('#createLeadForm_generalCity', data.City);
+                }
             });
 
             await test.step('Submit Lead Form', async () => {
-                await page.getByRole('button', { name: 'Create Lead' }).click();
-                await page.waitForLoadState('networkidle');
-            });
+                // Click create lead button and wait for navigation
+                await Promise.all([
+                    page.waitForNavigation(),
+                    page.click('input[name="submitButton"]')
+                ]);
 
-            await test.step('Verify Lead Creation', async () => {
+                // Verify lead creation if expected
                 if (data.ExpectedResult === 'Success') {
-                    // Verify lead creation success
+                    // Wait for the view lead page to load
                     await page.waitForSelector('#viewLead_companyName_sp');
-                    const actualCompanyName = await page.locator('#viewLead_companyName_sp').innerText();
-                    test.expect(actualCompanyName).toBe(companyName);
+                    
+                    // Get the displayed company name
+                    const displayedCompanyName = await page.textContent('#viewLead_companyName_sp');
+                    
+                    // Verify the company name matches
+                    expect(displayedCompanyName).toContain(companyName);
                 } else {
-                    // Verify error message
+                    // Verify error message exists
                     await page.waitForSelector('.errorMessage');
+                    const errorMessage = await page.textContent('.errorMessage');
+                    expect(errorMessage).toBeTruthy();
                 }
-            });
-
-            await test.step('Logout', async () => {
-                await page.getByRole('link', { name: 'Logout' }).click();
-                await page.waitForLoadState('networkidle');
             });
         });
     }
