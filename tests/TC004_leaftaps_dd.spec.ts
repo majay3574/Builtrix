@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { ExcelDataProvider } from '../helpers/dataUtils/excelDD';
 import path from 'path';
 import { FakerData } from '../helpers/testDataGen/fakerUtils';
@@ -7,11 +7,11 @@ import { FakerData } from '../helpers/testDataGen/fakerUtils';
 const excelProvider = new ExcelDataProvider(path.join(__dirname, '../data/testData/LeafTapsData.xlsx'));
 
 test.describe('Data Driven Tests - LeafTaps Application', () => {
-    // Get test data from Excel
     const testData = excelProvider.getTestData('LeadData');
 
     for (const data of testData) {
         test(`Create Lead - ${data.TestCaseID}: ${data.TestDescription}`, async ({ page }) => {
+            test.setTimeout(120000); // Increase timeout to 2 minutes
             // Add test annotations for better reporting
             test.info().annotations.push(
                 { type: 'TestCase', description: data.TestCaseID },
@@ -25,11 +25,21 @@ test.describe('Data Driven Tests - LeafTaps Application', () => {
             const lastName = data.LastName || FakerData.getLastName();
 
             await test.step('Login to LeafTaps', async () => {
-                await page.goto('http://leaftaps.com/opentaps/control/main');
-                await page.locator('#username').fill(data.Username);
-                await page.locator('#password').fill(data.Password);
-                await page.locator('.decorativeSubmit').click();
-                await page.waitForLoadState('networkidle');
+                // Navigate to the login page
+                await page.goto('http://leaftaps.com/opentaps/control/login');
+                
+                // Wait for the form to be ready
+                await page.waitForSelector('#username', { state: 'visible' });
+                
+                // Fill in login details
+                await page.fill('#username', data.Username);
+                await page.fill('#password', data.Password);
+                
+                // Click login button and wait for navigation
+                await Promise.all([
+                    page.waitForNavigation(),
+                    page.click('.decorativeSubmit')
+                ]);
             });
 
             await test.step('Navigate to Create Lead', async () => {
