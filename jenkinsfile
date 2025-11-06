@@ -1,21 +1,33 @@
+/**
+ * Jenkins Pipeline for Playwright Test Automation
+ * - Runs tests using Node.js
+ * - Generates and publishes test reports
+ * - Sends email notifications
+ */
 pipeline {
+    // Pipeline Configuration
     agent any
 
+    // Required Tools
     tools {
         nodejs 'NODE JS'
     }
 
+    // Global Environment Variables
     environment {
         CI = 'true'
     }
 
+    // Pipeline Stages
     stages {
+        // Source Control
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
+        // Environment Setup Stages
         stage('Check Node & npm') {
             steps {
                 script {
@@ -43,6 +55,7 @@ pipeline {
             }
         }
 
+        // Test Execution Stage
         stage('Run Playwright tests') {
             steps {
                 script {
@@ -56,6 +69,7 @@ pipeline {
             }
         }
 
+        // Report Generation and Publishing Stages
         stage('Publish Report') {
             steps {
                 script {
@@ -74,22 +88,37 @@ pipeline {
             }
         }
 
+        stage('Publish HTML Report') {
+            steps {
+                publishHTML(target: [
+                    reportDir: 'playwright-report',       // Report directory
+                    reportFiles: 'index.html',           // Main report file
+                    reportName: 'Playwright Test Report', // Display name
+                    keepAll: true,                       // Retain all reports
+                    alwaysLinkToLastBuild: true,         // Link to latest
+                    allowMissing: false                  // Fail if missing
+                ])
+            }
+        }
+
+        // Notification Stage
         stage('Send Email') {
             steps {
                 script {
                     echo 'Sending Playwright report via email...'
                     emailext(
-    subject: 'Playwright Report',
-    body: 'Test email',
-    to: 'nishanishaahsin96@gmail.com',
-    attachmentsPattern: 'test-results.txt',
-    debug: true
-)
+                        subject: 'Playwright Report',
+                        body: 'Test email',
+                        to: 'nishanishaahsin96@gmail.com',
+                        attachmentsPattern: 'test-results.txt',
+                        debug: true
+                    )
                 }
             }
         }
     }
 
+    // Post-Build Actions
     post {
         always {
             echo 'Pipeline execution completed.'
